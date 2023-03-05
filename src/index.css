@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App{
+  /* align-items: center; */
+  text-align: center;
+}
+
+.navbar {
+  /* padding: 20px; */
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.navbar .links {
+  margin-left: auto;
+}
+
+.navbar a {
+  text-align: center;
+  text-decoration: none;
+  padding: 20px;
+  margin-left: 15px;
+}
+
+
+.restaurant-bar {
+  align-items: center;
+}
+
+.restaurant-bar h1{
+  /* margin: 0%; */
+}
+
+.restaurant .sections .sections-bar{
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}
+
+.restaurant .sections .sections-bar h2 {
+  width: 20%;
+  display: inline-block;
+  border-left: 0.5px solid #f01a07;
+  border-right: 0.5px solid #f01a07;
+}
+
+.restaurant .sections .sections-bar {
+  display: flex;
+  font-weight: bold;
+}
+
+.restaurant .sections .sections-bar .section-button{
+  margin: auto;
+  flex: 1 1 auto;
+  line-height: 40px;
+}
+
+.section-button + .section-button {
+  border-left: solid 1px black;
+}
+
+.section-button:hover {
+  background-color: #a8aca8;
+}
+
+.section-photos {
+  /* position: relative; */
+  width: 60%;
+  display: inline-block;
+}
+
+.img-container {
+  margin: auto;
+  width: 85%;
+  position: relative;
+}
+
+.section-img {
+  width: 100%;
+  border-radius: 10%;
+  /* margin-left: 3.5%; */
+}
+
+.section-img:hover {
+  opacity: 45%;
+}
+
+.section-icon {
+  top: 6%;
+  bottom: 0;
+  left: 6%;
+  right: 0;
+  position: absolute;
+  color: #f2f2f2;
+  font-size: 250%;
+}
+
+.section-icon:hover {
+  background-color: #f01a07;
+  border-radius: 20%;
+}
+
+
+
+.dine-in-reserve {
+  height: 100%;
+  width: 40%;
+  display: inline-block;
+}
+
+.menu .menu-item *{
+  display: inline-block;
+  width: 20%;
+}
+
+.reserve {
+  /* border: 1px solid #0e0c0c; */
+  background-color: #099007;
+  color: #f6f7f6;
+  display: inline-block;
+  /* height: 20px;
+  width: 45%; */
+}
+
+.close-reserve {
+  /* border: 1px solid #0e0c0c; */
+  background-color: #f01a07;
+  color: #f6f7f6;
+  display: inline-block;
+  /* height: 30px;
+  width: 15%; */
+  margin-left: 20px;
+}
