@@ -12,22 +12,6 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
-//  const useStyles = ThemeProvider(theme => ({
-//   btn:{
-//     borderRadius:'4rem',
-//     width:'20rem',
-//     height:'3.5rem',
-//     fontSize:'1rem',
-//   '&:hover': {
-//       backgroundColor: 'rgb(67, 110, 24)',
-
-//     },
-
-//   },
-//   btn1:{
-
-//   }
-// }));
 
 const Signup = () => {
   const paperStyle = { padding: "30px 20px", width: 750, margin: "40px auto" };
@@ -36,17 +20,19 @@ const Signup = () => {
   const imgstyle = { margin: "80px 0 0 0" };
   // const classes = useStyles();
 
-  const [user, setUser] = useState({name:"", lname:"", password:"", email:"", cpassword:""});
+  const [user, setUser] = useState({fname:"", lname:"", password:"", email:"", cpassword:""});
+
   const onDetailChange = (event) => {
-    console.log({[event.target.name]:event.target.value});
+    // console.log({[event.target.name]:event.target.value});
     setUser({...user, [event.target.name]:event.target.value});
   }
+
   const onSignUpClick = async (event) => {
     event.preventDefault();
     if(user.cpassword === user.password)
     {
-      console.log("Re-enetered password matched with first password.");
-      const response = await fetch("http://localhost:8080/createUser",{
+      console.log("passwords match");
+      const response = await fetch("http://localhost:8080/signup",{
         method:'POST',
         header:{
           'Content-Type':'application/json'
@@ -62,7 +48,7 @@ const Signup = () => {
     }
     else
     {
-      console.log("Re-enetered password doesn't match with first password.");
+      console.log("passwords didn't match.");
     }
   }
 
@@ -103,8 +89,8 @@ const Signup = () => {
                       </InputAdornment>
                     ),
                   }}
-                  name="name"
-                  value={user.name}
+                  name="fname"
+                  value={user.fname}
                   onChange={(event) => onDetailChange(event)}
                 ></TextField>
                 <TextField
