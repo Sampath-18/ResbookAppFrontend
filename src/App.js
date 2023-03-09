@@ -1,3 +1,4 @@
+// sampath is the good coder
 import "./App.css";
 import Home from "./pages/Home";
 import Restaurant from "./components/ResList/Restaurant";
