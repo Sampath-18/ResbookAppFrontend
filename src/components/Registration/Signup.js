@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import "./signup.css";
 import {
-  Avatar,
   Button,
   Grid,
   Paper,
@@ -36,6 +35,36 @@ const Signup = () => {
   const marginStyle = { margin: "30px 0 0 180px " };
   const imgstyle = { margin: "80px 0 0 0" };
   // const classes = useStyles();
+
+  const [user, setUser] = useState({name:"", lname:"", password:"", email:"", cpassword:""});
+  const onDetailChange = (event) => {
+    console.log({[event.target.name]:event.target.value});
+    setUser({...user, [event.target.name]:event.target.value});
+  }
+  const onSignUpClick = async (event) => {
+    event.preventDefault();
+    if(user.cpassword === user.password)
+    {
+      console.log("Re-enetered password matched with first password.");
+      const response = await fetch("http://localhost:8080/createUser",{
+        method:'POST',
+        header:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(user)
+      });
+      const json = await response.json();
+      console.log("Signup status:",json);
+      if(!json.success)
+      {
+        alert("Enter Valid credentials");
+      }
+    }
+    else
+    {
+      console.log("Re-enetered password doesn't match with first password.");
+    }
+  }
 
   return (
     <>
@@ -74,6 +103,9 @@ const Signup = () => {
                       </InputAdornment>
                     ),
                   }}
+                  name="name"
+                  value={user.name}
+                  onChange={(event) => onDetailChange(event)}
                 ></TextField>
                 <TextField
                   color="secondary"
@@ -81,6 +113,9 @@ const Signup = () => {
                   fullWidth
                   margin="normal"
                   placeholder="Enter your Last Name"
+                  name="lname"
+                  value={user.lname}
+                  onChange={(event) => onDetailChange(event)}
                 ></TextField>
                 <TextField
                   color="secondary"
@@ -96,6 +131,9 @@ const Signup = () => {
                       </InputAdornment>
                     ),
                   }}
+                  name="email"
+                  value={user.email}
+                  onChange={(event) => onDetailChange(event)}
                 ></TextField>
 
                 <TextField
@@ -112,11 +150,14 @@ const Signup = () => {
                       </InputAdornment>
                     ),
                   }}
+                  name="password"
+                  value={user.password}
+                  onChange={(event) => onDetailChange(event)}
                 ></TextField>
                 <TextField
                   variant="outlined"
                   fullWidth
-                  placeholder="Enter Your CPassword"
+                  placeholder="Re-enter Your Password"
                   margin="normal"
                   color="secondary"
                   type="password"
@@ -127,6 +168,9 @@ const Signup = () => {
                       </InputAdornment>
                     ),
                   }}
+                  name="cpassword"
+                  value={user.cpassword}
+                  onChange={(event) => onDetailChange(event)}
                 ></TextField>
                 <Button
                   sx={{
@@ -144,6 +188,7 @@ const Signup = () => {
                   variant="contained"
                   color="secondary"
                   style={marginStyle}
+                  onClick={(event) => onSignUpClick(event)}
                 >
                   Signup
                 </Button>

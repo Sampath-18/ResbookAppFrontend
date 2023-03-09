@@ -8,13 +8,20 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useState } from "react";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import { Container } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
 const Booking = () => {
-  const [value, setValue] = React.useState(dayjs("2014-08-18T21:11:54"));
+  const [reservationTime, setReservationTime] = React.useState(dayjs("2014-08-18T21:11:54"));
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  const handleReservationTimeChange = (newValue) => {
+    setReservationTime(newValue);
   };
+  
+  const navigate = useNavigate();
+
+  const bookChairs = () => {
+    navigate("/BookingSummary")
+  }
 
   const [guests, setGuests] = useState([]);
 
@@ -46,8 +53,8 @@ const Booking = () => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimePicker
           label="Date&Time picker"
-          value={value}
-          onChange={handleChange}
+          value={reservationTime}
+          onChange={handleReservationTimeChange}
           renderInput={(params) => (
             <TextField sx={{ marginTop: "1em" }} {...params} />
           )}
@@ -102,6 +109,9 @@ const Booking = () => {
       >
         <AddCircleIcon />
         <Typography variant="button">Guest</Typography>
+      </Button>
+      <Button variant="contained" sx={{margin:'1em'}} onClick={() => bookChairs()}>
+        Book Chairs
       </Button>
     </Paper>
   );

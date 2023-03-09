@@ -1,4 +1,4 @@
-import { Avatar, IconButton, Paper, Typography } from "@mui/material";
+import { Avatar, Button, Divider, IconButton, Paper, Typography } from "@mui/material";
 import React from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
@@ -75,11 +75,31 @@ const Profile = () => {
       </Paper>
 
       <Paper elevation={3} sx={{ marginTop: "1em", display: "flex", flexDirection: "row", justifyContent: "space-around", }} >
-        
-        <Paper elevation={0} style={{ display: "flex", flexDirection: "column", width:'70%' }}>
-          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-            Previous Reservations
-          </Typography>
+        <Paper elevation={0} sx={{display:"flex", flexDirection:"column", marginTop:"1em"}}>
+          <Button sx={{color:"black", fontWeight:"bold"}}>
+            My Account
+          </Button>
+          <Button sx={{color:"black", fontWeight:"bold"}}>
+            Completed Dine-in Reservations
+          </Button>
+          <Button sx={{color:"black", fontWeight:"bold"}}>
+            Upcoming Dine-in Reservations
+          </Button>
+          <Button sx={{color:"black", fontWeight:"bold"}}>
+            Completed Catering Reservations
+          </Button>
+          <Button sx={{color:"black", fontWeight:"bold"}}>
+            Upcoming Catering Reservations
+          </Button>
+          <Button sx={{color:"black", fontWeight:"bold"}}>
+            Saved Restaurants
+          </Button>
+          <Button sx={{color:"black", fontWeight:"bold"}}>
+            Favourite Restaurants
+          </Button>
+        </Paper>
+        <Divider orientation="vertical" flexItem />
+        <Paper elevation={0} style={{ display: "flex", flexDirection: "column", width:'70%' }}>          
           {bookings.map((booking, i) => (
             <Paper key={i} elevation={2} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center",marginTop:'1em' }} >
               <LocalDiningIcon sx={{ fontSize: "80px" }} />

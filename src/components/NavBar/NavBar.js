@@ -12,7 +12,6 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
-import { logDOM } from '@testing-library/react';
 // import SearchBar from './SearchBar';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
@@ -60,7 +59,7 @@ const Search = styled('div')(({ theme }) => ({
   }));
 
 const pages = {'Home':'/', 'Book a Table':'/', 'Blog':'/Blogs'};
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = {'Profile':'/ProfilePage', 'Account':'/ProfilePage', 'Dashboard':'/', 'Logout':'/'};
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -79,8 +78,9 @@ function NavBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
+    navigate(settings[setting]);
   };
 
   return (
@@ -223,8 +223,8 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+              {Object.keys(settings).map((setting) => (
+                <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

@@ -13,8 +13,10 @@ const BookingSummary = () => {
         {name:'Sai Teja', phone:'9390463039'},
     ],
     status: "SuccessFul Booking",
-    dateTime: "15th Nov 2022 at 12:15 PM",
+    reservationTime: "15th Nov 2022 at 12:15 PM",
     BookingID: "DO18598744",
+    bookingTime: "10th Nov 2022 at 10:06 AM",
+    sectionBooked: "Family Section"
   };
   return (
     <Container>
@@ -33,8 +35,10 @@ const BookingSummary = () => {
       </Paper>
       <Paper elevation={3} sx={{marginTop:'1em'}}>
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>Summary:</Typography>
+        <Typography variant="h6">Section Booked:{bookingSummary.sectionBooked}</Typography>
+        <Typography variant="h6">Booking Time:{bookingSummary.bookingTime}</Typography>
         <Typography variant="h6">Status:{bookingSummary.status}</Typography>
-        <Typography variant="h6">Date & Time:{bookingSummary.dateTime}</Typography>
+        <Typography variant="h6">Reservation Time:{bookingSummary.reservationTime}</Typography>
         <Typography variant="h6">ID:{bookingSummary.BookingID}</Typography>
         <Typography variant="h6">Guests:{bookingSummary.guests.length}</Typography>
       </Paper>

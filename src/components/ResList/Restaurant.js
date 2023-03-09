@@ -893,11 +893,12 @@ const Restaurant = () => {
               <Typography>{currentSection.Overview}</Typography>
             </Paper>
           </Paper>
-
+          
           <Paper sx={{ marginTop: "1em" }}>
             <Paper elavation={3}>
               <Typography variant="h4" fontWeight="bold">Menu</Typography>
-
+              
+              {/* search bar for menu */}
               <Paper
                 component="form"
                 elevation={4}
@@ -933,7 +934,7 @@ const Restaurant = () => {
                   <DirectionsIcon />
                 </IconButton>
               </Paper>
-
+              
               <Grid container>
                 {Array.from(currentSection.Menu).map((menu) => (
                   <Grid item xs={6}>
@@ -955,6 +956,7 @@ const Restaurant = () => {
                   </Grid>
                 ))}
               </Grid>
+              
             </Paper>
           </Paper>
 

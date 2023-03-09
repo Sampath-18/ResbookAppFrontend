@@ -19,6 +19,8 @@ import Reviews from "./components/Reviews/Reviews";
 import ReviewIntake from "./components/Reviews/ReviewIntake";
 import CateringIntake from "./components/Caterings/CateringIntake";
 import BookCatering from "./components/Caterings/BookCatering";
+import ProfilePage from "./components/CustomerModule/ProfilePage";
+import MenuCategory from "./components/Menu/MenuCategory";
 
 function App() {
   return (
@@ -43,6 +45,8 @@ function App() {
         <Route exact path="/ReviewIntake" element={<ReviewIntake />} />
         <Route exact path="/CateringIntake" element={<CateringIntake />} />
         <Route exact path="/BookCatering" element={<BookCatering />} />
+        <Route exact path="/ProfilePage" element={<ProfilePage />} />
+        <Route exact path="/MenuCategory" element={<MenuCategory />} />
       </Routes>
     </div>
   );
