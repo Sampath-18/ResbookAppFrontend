@@ -20,7 +20,7 @@ const Signup = () => {
   const imgstyle = { margin: "80px 0 0 0" };
   // const classes = useStyles();
 
-  const [user, setUser] = useState({fname:"", lname:"", password:"", email:"", cpassword:""});
+  const [user, setUser] = useState({fname:"", lname:"", email:"", password:"", cpassword:""});
 
   const onDetailChange = (event) => {
     // console.log({[event.target.name]:event.target.value});
@@ -31,20 +31,27 @@ const Signup = () => {
     event.preventDefault();
     if(user.cpassword === user.password)
     {
-      console.log("passwords match");
+      // console.log("passwords matched", JSON.stringify(user));
       const response = await fetch("http://localhost:8080/signup",{
         method:'POST',
-        header:{
+        headers:{
           'Content-Type':'application/json'
         },
-        body:JSON.stringify(user)
-      });
-      const json = await response.json();
-      console.log("Signup status:",json);
-      if(!json.success)
-      {
-        alert("Enter Valid credentials");
-      }
+        body: JSON.stringify(user)
+      })
+      response.json()
+      .then(data => {
+        console.log("response from backend after signup request:", data);
+        if(!data.success)
+        {
+          alert("Enter Valid credentials");
+        }
+        else
+        {
+          
+        }
+      })
+      .catch(err => {console.error(err)})      
     }
     else
     {

@@ -1,15 +1,15 @@
 import { Paper, Typography, Grid } from "@mui/material";
 import React, { useState } from "react";
 
-const TimingsIntake = () => {
+const TimingsIntake = (props) => {
   const [timings, setTimings] = useState({
-    Monday: { "open time": "", "close time": "" },
-    Tuesday: { "open time": "", "close time": "" },
-    Wednesday: { "open time": "", "close time": "" },
-    Thursday: { "open time": "", "close time": "" },
-    Friday: { "open time": "", "close time": "" },
-    Saturday: { "open time": "", "close time": "" },
-    Sunday: { "open time": "", "close time": "" },
+    Monday: { "open_time": "", "close_time": "" },
+    Tuesday: { "open_time": "", "close_time": "" },
+    Wednesday: { "open_time": "", "close_time": "" },
+    Thursday: { "open_time": "", "close_time": "" },
+    Friday: { "open_time": "", "close_time": "" },
+    Saturday: { "open_time": "", "close_time": "" },
+    Sunday: { "open_time": "", "close_time": "" },
   });
 
   const handleTimeChanges = (event, day) => {
@@ -19,7 +19,8 @@ const TimingsIntake = () => {
     const timingsCopy = {...timings}
     timingsCopy[day]=newTimings
     setTimings(timingsCopy);
-    console.log(event.target.value, newTimings);
+    // console.log(event.target.value, newTimings);
+    props.setTimings(timings);
   }
 
   return (
@@ -43,10 +44,10 @@ const TimingsIntake = () => {
               <Typography textAlign="start" marginLeft='1em'>{day}</Typography>
             </Grid>
             <Grid item>
-              <input type="time" name='open time' onChange={(event) => handleTimeChanges(event, day) } />
+              <input type="time" name='open_time' onChange={(event) => handleTimeChanges(event, day) } />
             </Grid>
             <Grid item>
-              <input type="time" name='close time' onChange={(event) => handleTimeChanges(event, day) } />
+              <input type="time" name='close_time' onChange={(event) => handleTimeChanges(event, day) } />
             </Grid>
           </Grid>
         ))}

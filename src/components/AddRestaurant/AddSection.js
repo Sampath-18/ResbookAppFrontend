@@ -18,8 +18,6 @@ const AddSection = (props) => {
     props.onRemove();
   };
 
-  const navigate = useNavigate();
-
   return (
     <>
       <Container
@@ -78,8 +76,8 @@ const AddSection = (props) => {
                   id="outlined-basic"
                   label="photos"
                   variant="outlined"
-                  value={props.photos}
-                  name="photos"
+                  value={props.secImg}
+                  name="secImg"
                   onChange={(event) => props.onChange(event)}
                 />
               </Grid>
@@ -92,8 +90,8 @@ const AddSection = (props) => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={props.catering}
-                      name="catering"
+                      value={props.cateringAvailable}
+                      name="cateringAvailable"
                       label="Catering available?"
                       onChange={(event) => props.onChange(event)}
                     >
@@ -108,8 +106,8 @@ const AddSection = (props) => {
                   id="outlined-basic"
                   label="catering avaiable?"
                   variant="outlined"
-                  value={props.catering}
-                  name="catering"
+                  value={props.cateringAvailable}
+                  name="cateringAvailable"
                   onChange={(event) => props.onChange(event)}
                 />
               </Grid> */}
@@ -142,9 +140,9 @@ const AddSection = (props) => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={props.dinein}
+                      value={props.dineinAvailable}
                       label="Dine-in available"
-                      name="dinein"
+                      name="dineinAvailable"
                       onChange={(event) => props.onChange(event)}
                     >
                       <MenuItem value="Yes">Yes</MenuItem>
@@ -173,8 +171,8 @@ const AddSection = (props) => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={props.autoAccept}
-                      name="autoAccept"
+                      value={props.autoAcceptBookings}
+                      name="autoAcceptBookings"
                       label="AutoAccept Bookings"
                       onChange={(event) => props.onChange(event)}
                     >
@@ -189,8 +187,8 @@ const AddSection = (props) => {
                   id="outlined-basic"
                   label="Auto accept booking?"
                   variant="outlined"
-                  value={props.autoAccept}
-                  name="autoAccept"
+                  value={props.autoAcceptBookings}
+                  name="autoAcceptBookings"
                   onChange={(event) => props.onChange(event)}
                 />
               </Grid> */}
@@ -202,8 +200,8 @@ const AddSection = (props) => {
                   multiline
                   fullWidth
                   minRows={4}
-                  value={props.description}
-                  name="description"
+                  value={props.sectionDescription}
+                  name="sectionDescription"
                   onChange={(event) => props.onChange(event)}
                 />
               </Grid>
@@ -213,7 +211,7 @@ const AddSection = (props) => {
             </Button> */}
 
           </Paper>
-          <MenuIntake />
+          <MenuIntake setMenu={(menu) => props.setMenu(menu)} />
         </Container>
         <Container
           sx={{
@@ -223,7 +221,7 @@ const AddSection = (props) => {
             width: "35%",
           }}
         >
-          <TimingsIntake timings={props.timings} />
+          <TimingsIntake timing={props.timing} setTimings={(timing) => props.setTimings(timing)} />
           <Button
             sx={{ marginTop: "1em" }}
             variant="contained"

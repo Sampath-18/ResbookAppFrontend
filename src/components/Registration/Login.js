@@ -1,25 +1,63 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Button,
   Grid,
   Paper,
   TextField,
-  Typography,
   InputAdornment,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 
 import LockIcon from "@mui/icons-material/Lock";
 import "./login.css";
+import { UserContext } from "../contexts/UserContext";
 
-const Signup = () => {
+const Login = () => {
   const paperStyle = { padding: "30px 20px", width: 750, margin: "50px auto" };
   const headerStyle = { margin: 10 };
   const marginStyle = { margin: "30px 0 0 180px " };
   const imgstyle = { margin: "50px 0 0 0" };
-  //   const classes = useStyles();
+
+  const navigate = useNavigate();
+
+  const { user, login, logout } = useContext(UserContext);
+
+  const [loginDetails, setLoginDetails] = useState({email:"", password:""})
+
+  const handleDetailChange = (event) => {
+    setLoginDetails({...loginDetails, [event.target.name]: event.target.value})
+  }
+
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const response = await fetch("http://localhost:8080/login",{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body: JSON.stringify(loginDetails)
+        })
+      const json = await response.json();
+      console.log("Login status:",json);
+      console.log("json", json);
+      if(!json.success)
+      {
+        alert("Enter Valid credentials");
+      }
+      else
+      {
+        // alert("Logged in successfully!!!");
+        login(json.user);
+        console.log("Logged in successfully!!!");
+        navigate('/');
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <>
@@ -59,6 +97,9 @@ const Signup = () => {
                       </InputAdornment>
                     ),
                   }}
+                  name="email"
+                  value={loginDetails.email}
+                  onChange={(event) => handleDetailChange(event)}
                 ></TextField>
 
                 <TextField
@@ -75,6 +116,9 @@ const Signup = () => {
                       </InputAdornment>
                     ),
                   }}
+                  name="password"
+                  value={loginDetails.password}
+                  onChange={(event) => handleDetailChange(event)}
                 ></TextField>
 
                 <Button
@@ -92,6 +136,7 @@ const Signup = () => {
                   variant="contained"
                   color="primary"
                   style={marginStyle}
+                  onClick={(event) => handleSubmit(event)}
                 >
                   Login
                 </Button>
@@ -125,4 +170,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;

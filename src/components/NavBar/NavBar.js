@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import { InputBase } from '@mui/material';
+import { UserContext } from '../contexts/UserContext';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -67,6 +68,8 @@ function NavBar() {
   // console.log(Object.keys(pages));
   const navigate = useNavigate();
 
+  const {user, login, logout} = React.useContext(UserContext);
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -80,6 +83,10 @@ function NavBar() {
 
   const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
+    if(setting === "Logout"){
+      // console.log("")
+      logout()
+    }
     navigate(settings[setting]);
   };
 
