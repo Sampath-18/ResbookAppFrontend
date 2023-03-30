@@ -12,6 +12,7 @@ export default function RestaurantIntake() {
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
   const [road, setRoad] = useState("");
+  const [coverImage,setCoverImage] = useState(null) 
 
   const getCurrentLocation = () => {
     navigator.geolocation.getCurrentPosition(
@@ -70,7 +71,8 @@ export default function RestaurantIntake() {
     email: "",
     phone1: "",
     phone2: "",
-    password: ""
+    password: "",
+    coverImage: "",
   });
 
   const navigate = useNavigate();
@@ -84,7 +86,8 @@ export default function RestaurantIntake() {
       restaurantDetails.email === "" ||
       restaurantDetails.phone1 === "" ||
       restaurantDetails.phone2 === "" ||
-      restaurantDetails.password === ""
+      restaurantDetails.password === "" ||
+      restaurantDetails.avgCost <=0
     ) {
       alert("Fill the required fields");
     } 
@@ -108,6 +111,8 @@ export default function RestaurantIntake() {
             Country: country,
             Road: road,
           },
+          coverImage:coverImage,
+          avgCost:restaurantDetails.avgCost
         },
       });
     }
@@ -143,6 +148,7 @@ export default function RestaurantIntake() {
           onChange={(event) => handleInputChanges(event)}
           required
         />
+        <input type="file" accept="image/*" onChange={(e) => setCoverImage(e.target.files[0])}></input>
       </Paper>
 
       <Paper elevation={3} sx={{ marginTop: "1em", padding: "0.5em" }}>
@@ -196,15 +202,6 @@ export default function RestaurantIntake() {
 
       <Paper elevation={3} sx={{ marginTop: "1em", padding: "0.5em" }}>
         <Typography variant="h4">Additional Restaurant details</Typography>
-        {/* <TextField
-          id="outlined-basic"
-          label="Parking available?"
-          variant="outlined"
-          name="parkingAvailable"
-          value={restaurantDetails.parkingAvailable}
-          onChange={(event) => handleInputChanges(event)}
-          required
-        /> */}
         <FormControl style={{ width: "20%" }}>
           <InputLabel id="demo-simple-select-label">
             Parking available?

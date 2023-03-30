@@ -12,6 +12,7 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const paperStyle = { padding: "30px 20px", width: 750, margin: "40px auto" };
@@ -27,6 +28,7 @@ const Signup = () => {
     setUser({...user, [event.target.name]:event.target.value});
   }
 
+  const navigate = useNavigate()
   const onSignUpClick = async (event) => {
     event.preventDefault();
     if(user.cpassword === user.password)
@@ -48,7 +50,8 @@ const Signup = () => {
         }
         else
         {
-          
+          setUser(data.user)
+          navigate("/")
         }
       })
       .catch(err => {console.error(err)})      

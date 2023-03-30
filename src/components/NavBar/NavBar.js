@@ -68,6 +68,18 @@ function NavBar() {
   // console.log(Object.keys(pages));
   const navigate = useNavigate();
 
+  const onProfileClick = () => {
+    if(user)
+    {
+      const userId = user._id
+      console.log("Navigating to profilePage/"+userId);
+      navigate("/ProfilePage/"+userId)
+    }
+    else{
+      alert("Login to view your profile!!")
+    }
+  }
+
   const {user, login, logout} = React.useContext(UserContext);
 
   const handleOpenNavMenu = (event) => {
@@ -86,6 +98,11 @@ function NavBar() {
     if(setting === "Logout"){
       // console.log("")
       logout()
+    }
+    else if(setting === "Profile")
+    {
+      onProfileClick();
+      return
     }
     navigate(settings[setting]);
   };

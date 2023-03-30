@@ -12,8 +12,8 @@ import Login from "./components/Registration/Login";
 import Navbar from "./components/NavBar/NavBar";
 import LocationSelector from "./components/AddRestaurant/LocationSelector";
 import Blog from "./components/Blogs/Blog";
-import Booking from "./components/ResList/Booking";
-import Profile from "./components/CustomerModule/Profile";
+import Booking from "./components/Booking/DineinBooking";
+// import Profile from "./components/CustomerModule/Profile";
 import BookingSummary from "./components/CustomerModule/BookingSummary";
 import PhotoUploader from "./components/AddRestaurant/PhotoUploader";
 import Reviews from "./components/Reviews/Reviews";
@@ -26,6 +26,7 @@ import GeolocationComponent from "./components/location/GeoLocationComponent";
 import { UserContext } from "./components/contexts/UserContext";
 import { useContext } from "react";
 import ReviewAddRestaurant from "./components/AddRestaurant/ReviewAddRestaurant";
+import MenuItemComponent from "./components/Menu/MenuItemComponent";
 // import { DataContext } from "./components/contexts/UserContext";
 
 
@@ -50,7 +51,7 @@ function App(props) {
           <Route exact path="/Login" element={<Login />} />
           <Route exact path="/Blogs" element={<Blog />} />
           <Route exact path="/Booking" element={<Booking />} />
-          <Route exact path="/Profile" element={<Profile />} />
+          {/* <Route exact path="/Profile" element={<Profile />} /> */}
           <Route exact path="/LocationSelector" element={<LocationSelector />} />
           <Route exact path="/BookingSummary" element={<BookingSummary />} />
           <Route exact path="/PhotoUploader" element={<PhotoUploader />} />
@@ -58,10 +59,11 @@ function App(props) {
           <Route exact path="/ReviewIntake" element={<ReviewIntake />} />
           <Route exact path="/CateringIntake" element={<CateringIntake />} />
           <Route exact path="/BookCatering" element={<BookCatering />} />
-          <Route exact path="/ProfilePage" element={<ProfilePage />} />
+          <Route exact path="/ProfilePage/:id" element={<ProfilePage />} />
           <Route exact path="/MenuCategory" element={<MenuCategory />} />
           <Route exact path="/GeolocationComponent" element={<GeolocationComponent />} />
           <Route exact path="/ReviewAddRestaurant" element={<ReviewAddRestaurant />} />
+          <Route exact path="/MenuItemComponent" element={<MenuItemComponent />} />
         </Routes>
       </div>
   );

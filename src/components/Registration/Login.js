@@ -40,17 +40,17 @@ const Login = () => {
           },
           body: JSON.stringify(loginDetails)
         })
-      const json = await response.json();
-      console.log("Login status:",json);
-      console.log("json", json);
-      if(!json.success)
+      const responseJson = await response.json();
+      console.log("Login status:",responseJson);
+      console.log("json", responseJson);
+      if(!responseJson.success)
       {
         alert("Enter Valid credentials");
       }
       else
       {
         // alert("Logged in successfully!!!");
-        login(json.user);
+        login(responseJson.user);
         console.log("Logged in successfully!!!");
         navigate('/');
       }

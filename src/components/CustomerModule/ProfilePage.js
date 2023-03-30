@@ -17,9 +17,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Paper } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import { UserContext } from '../contexts/UserContext';
 
 const drawerWidth = 240;
 
@@ -31,34 +32,132 @@ function ProfilePage(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const bookings = [
-    {
-      restaurantName: "Out of the box Courtyard",
-      city: "Connaught Palace, Central Delhi, Delhi",
-      guests: [
-        { name: "Sampath", phone: "9390402984" },
-        { name: "Srinivas", phone: "9347402984" },
-        { name: "Sai kumar", phone: "9390402976" },
-        { name: "Sai Teja", phone: "9390463039" },
-      ],
-      status: "SuccessFul Booking",
-      dateTime: "15th Nov 2022 at 12:15 PM",
-      BookingID: "DO18598744",
-    },
-    {
-      restaurantName: "Out of the box Courtyard",
-      city: "Connaught Palace, Central Delhi, Delhi",
-      guests: [
-        { name: "Sampath", phone: "9390402984" },
-        { name: "Srinivas", phone: "9347402984" },
-        { name: "Sai kumar", phone: "9390402976" },
-        { name: "Sai Teja", phone: "9390463039" },
-      ],
-      status: "SuccessFul Booking",
-      dateTime: "15th Nov 2022 at 12:15 PM",
-      BookingID: "DO18598744",
-    },
-  ]
+  const { id } = useParams();
+
+  // const bookings = [
+  //   {
+  //     restaurantName: "Out of the box Courtyard",
+  //     city: "Connaught Palace, Central Delhi, Delhi",
+  //     guests: [
+  //       { name: "Sampath", phone: "9390402984" },
+  //       { name: "Srinivas", phone: "9347402984" },
+  //       { name: "Sai kumar", phone: "9390402976" },
+  //       { name: "Sai Teja", phone: "9390463039" },
+  //     ],
+  //     status: "SuccessFul Booking",
+  //     dateTime: "15th Nov 2022 at 12:15 PM",
+  //     BookingID: "DO18598744",
+  //   },
+  //   {
+  //     restaurantName: "Out of the box Courtyard",
+  //     city: "Connaught Palace, Central Delhi, Delhi",
+  //     guests: [
+  //       { name: "Sampath", phone: "9390402984" },
+  //       { name: "Srinivas", phone: "9347402984" },
+  //       { name: "Sai kumar", phone: "9390402976" },
+  //       { name: "Sai Teja", phone: "9390463039" },
+  //     ],
+  //     status: "SuccessFul Booking",
+  //     dateTime: "15th Nov 2022 at 12:15 PM",
+  //     BookingID: "DO18598744",
+  //   },
+  // ]
+  // const { user, login, logout } = React.useContext(UserContext);
+  const [user,setUser] = React.useState(null)
+  const [userlikings,setUserLikings] = React.useState(null)
+  
+
+  React.useEffect(() => {
+    const fetchUserAndBookings = async () => {
+      console.log("user:",id);
+      let userResponse = await fetch("http://localhost:8080/getUser/"+id,{
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json'
+        }
+      })
+      userResponse = await userResponse.json()
+      const bookings = []
+      if(userResponse.success)
+      {
+        for(const bookingId of userResponse.user.bookings)
+        {
+          let bookingResponse = await fetch("http://localhost:8080/getBookingSummary/"+bookingId,{
+            method:'GET',
+            headers:{
+              'Content-Type':'application/json'
+            }
+          })
+          bookingResponse = await bookingResponse.json()
+          if(bookingResponse.success)
+          {
+            bookings.push(bookingResponse)
+          }
+        }
+      }
+      setUser({...userResponse.user, bookings:bookings})
+      console.log({...userResponse.user, bookings:bookings});
+    }
+    const fetchBookings = async () => {
+      console.log("called",user);
+      if(user)
+      {
+        const bookings = []
+        for(const bookingId of user.bookings)
+        {
+          let bookingResponse = await fetch("http://localhost:8080/getBookingSummary/"+bookingId,{
+            method:'GET',
+            headers:{
+              'Content-Type':'application/json'
+            }
+          })
+          bookingResponse = await bookingResponse.json()
+          if(bookingResponse.success)
+          {
+            bookings.push(bookingResponse)
+          }
+        }
+        setUser(bookings)
+      }
+    }
+    fetchUserAndBookings()
+  }, [])
+
+  React.useEffect(() => {
+    async function fetchUserLikings() {
+        console.log("called");
+        if(!user)
+        {
+            console.log("Couldn't fetch user likings because user hasn't logged in!!");
+            return
+        }
+        try {
+            let userlikings = await fetch("http://localhost:8080/getUserLikings/"+user._id,{
+                method:"GET",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            })
+            userlikings = await userlikings.json()
+            if(userlikings.success)
+            {
+                console.log("likings set");
+                setUserLikings(userlikings.userlikings)
+            }
+            else
+            {
+                console.log(userlikings.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    fetchUserLikings()
+}, [user])
+  
+  
+
+  
 
   const navigate = useNavigate();
 
@@ -83,6 +182,20 @@ function ProfilePage(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
+
+  const onBookingSummaryClick = (booking) => {
+    console.log("Navigating to Booking summary from profilepage");
+    navigate("/BookingSummary",{
+      state:{
+        booking:booking.booking,
+        restaurantName:booking.restaurant.name,
+        sectionName:booking.section.sectionName,
+        city:booking.restaurant.location.District
+      }
+    })
+  }
+
+
   return (
     <Box sx={{ display: 'flex'}}>
 
@@ -106,7 +219,7 @@ function ProfilePage(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Upcoming Dine-in Reservations
+            All Dine-in Reservations
           </Typography>
         </Toolbar>
       </AppBar>
@@ -145,48 +258,51 @@ function ProfilePage(props) {
         component="main"
         sx={{ display: "flex", flexDirection: "column", flexGrow: 1, marginTop:"1em", p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
-        {/* <Paper elevation={0} style={{  }}>           */}
-          {bookings.map((booking, i) => (
+        
+          {user 
+          ?
+          user.bookings.map((booking, i) => (
             <Paper key={i} elevation={2} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center", marginTop:'1em' }} >
               <LocalDiningIcon sx={{ fontSize: "80px" }} />
               <Paper elevation={0} sx={{ display: "flex", flexDirection: "column" }} >
                 <Typography sx={{ textAlign: "left", fontWeight: "bold" }}>
-                  {booking.restaurantName}
+                  {booking.restaurant.name}
                 </Typography>
                 <Typography sx={{ textAlign: "left" }}>
-                  {booking.city}
+                  {booking.restaurant.location.District}
                 </Typography>
                 
                 <Typography sx={{ textAlign: "left", marginTop:"1em" }}>
-                  {booking.dateTime}
+                  {booking.booking.reservationTime}
                 </Typography>
                 <Paper elevation={0} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", marginTop:"1em", alignItems:'flex-start' }} >
                   <div>
                     <Typography sx={{ textAlign: "left", color:"#4d4f4e" }}>Diners</Typography>
                     <Typography sx={{ textAlign: "left", fontWeight: "bold", color:"#4d4f4e" }}>
-                      {booking.guests.length}
+                      {booking.booking.guests.length}
                     </Typography>
                   </div>
-                  <div>
+                  <div style={{marginLeft:"1em"}}>
                     <Typography sx={{ textAlign: "left", color:"#4d4f4e" }}>
                       Booking ID
                     </Typography>
                     <Typography sx={{ textAlign: "left", fontWeight: "bold", color:"#4d4f4e" }}>
-                      {booking.BookingID}
+                      {booking.booking._id}
                     </Typography>
                   </div>
-                  <div>
+                  {/* <div>
                     <Typography sx={{ textAlign: "left", color:"#4d4f4e" }}>Sections</Typography>
                     <Typography sx={{ textAlign: "left", fontWeight: "bold", color:"#4d4f4e" }}>{0}</Typography>
-                  </div>
+                  </div> */}
                 </Paper>
               </Paper>
-              <IconButton onClick={() => navigate("/BookingSummary")}>
+              <IconButton onClick={() => onBookingSummaryClick(booking)}>
                 <KeyboardDoubleArrowRightIcon sx={{ fontSize: "80px" }} />
               </IconButton>
             </Paper>
-          ))}
-        {/* </Paper> */}
+          ))
+          :
+          <></>}
       </Box>
     </Box>
   );

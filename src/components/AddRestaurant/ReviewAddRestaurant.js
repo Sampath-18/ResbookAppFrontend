@@ -2,6 +2,8 @@ import React from "react";
 import { Typography, Paper, Button } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
+import axios from "axios";
+
 const ReviewAddRestaurant = () => {
   const location = useLocation();
   const { restaurant, sections } = location.state;
@@ -71,7 +73,23 @@ const ReviewAddRestaurant = () => {
   // };
 
   // After complete review by the Admin, add the restaurant to DB and acknowledge him with the status
+
+  // const imageReform = (file) => {
+  //   const Reader = new FileReader();
+  //   Reader.readAsDataURL(file)
+
+  //   //readyState = 0 => initialState
+  //   //readyState = 1 => processing
+  //   //readyState = 2 => Processed
+  //   Reader.onload = () => {
+  //     if (Reader.readyState === 2) {
+  //       return Reader.result;
+  //     }
+  //   }
+  // }
+
   const addRestaurantToDB = async (event) => {
+    console.log(location.state);
     event.preventDefault();
     try {
       const AddRestaurantResponse = await fetch(
@@ -85,6 +103,7 @@ const ReviewAddRestaurant = () => {
         }
       );
       AddRestaurantResponse.json().then(async (restaurantResponseData) => {
+        // console.log(restaurantResponseData);
         if (restaurantResponseData.success) {
           //restaurant added successfully
           console.log(
@@ -93,12 +112,23 @@ const ReviewAddRestaurant = () => {
             "added successfully to DB"
           );
           const resId = restaurantResponseData.restaurantId;
+          let formData1 = new FormData();
+          // console.log(restaurant.coverImage)
+          formData1.append("coverImage", restaurant.coverImage);
+          const boundary1 = Math.random().toString().substr(2);
+          let imgResponse1 = await axios.post(
+            "http://localhost:8080/updateRestaurant/updateImage/" + resId,
+            formData1,
+            {
+              "Content-Type": "multipart/form-data; boundary=" + boundary1,
+            }
+          );
+          imgResponse1 = imgResponse1.data;
+          if (imgResponse1.success) {
+            console.log("Cover Image for restaurant added successfully");
+          }
           for (let section of sections) {
             const menu = section.menu;
-            console.log(
-              "section adding:",
-              JSON.stringify({ ...section, menu: [] })
-            );
             const sectionResponse = await fetch(
               "http://localhost:8080/updateRestaurant/addSection/" + resId,
               {
@@ -119,71 +149,119 @@ const ReviewAddRestaurant = () => {
                   restaurant.name,
                   "successfully to DB"
                 );
-                for (const menuCategory of menu) {
+                let formData = new FormData();
+                for (const image of section.secImg) {
+                  formData.append("secImg", image);
+                }
+
+                // for (const key of formData.keys()) {
+                //   console.log(key);
+                // }
+
+                const boundary = Math.random().toString().substr(2);
+                // let imgResponse = await fetch(
+                //   "http://localhost:8080/updateSectionImages/" + secId,
+                //   {
+                //     method: "POST",
+                //     headers: {
+                //       "Content-Type": "multipart/form-data; boundary="+boundary
+                //     },
+                //     body: formData,
+                //   }
+                // );
+                let imgResponse = await axios.post(
+                  "http://localhost:8080/updateSectionImages/" + secId,
+                  formData,
+                  {
+                    "Content-Type": "multipart/form-data; boundary=" + boundary,
+                  }
+                );
+                imgResponse = imgResponse.data;
+                // console.log("image response:",imgResponse);
+                if (imgResponse.success) {
                   console.log(
-                    "category adding:",
-                    JSON.stringify({ categoryName: menuCategory.categoryName })
+                    "images uploaded succesfully for",
+                    section.sectionName,
+                    " : ",
+                    restaurant.name
                   );
-                  const menucategoryResponse = await fetch(
-                    "http://localhost:8080/updateRestaurant/updateSection/addMenuCategory/" +
-                      secId,
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
+                  for (const menuCategory of menu) {
+                    console.log(
+                      "category adding:",
+                      JSON.stringify({
                         categoryName: menuCategory.categoryName,
-                      }),
-                    }
-                  );
-                  menucategoryResponse
-                    .json()
-                    .then(async (categoryResponseData) => {
-                      if (categoryResponseData.success) {
-                        const categoryId = categoryResponseData.menuCategoryId;
-                        // console.log("category:",categoryId)
-                        console.log(
-                          "Menu Category:",
-                          menuCategory.categoryName,
-                          "added to Section:",
-                          section.sectionName,
-                          "successfully to DB"
-                        );
-                        for (const menuItem of menuCategory.menuItems) {
-                          console.log("item adding:", JSON.stringify(menuItem));
-                          // console.log("End point called:","http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/"+categoryId)
-                          const menuItemResponse = await fetch(
-                            "http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/" +
-                              categoryId,
-                            {
-                              method: "POST",
-                              headers: {
-                                "Content-Type": "application/json",
-                              },
-                              body: JSON.stringify(menuItem),
-                            }
-                          );
-                          menuItemResponse.json().then(async (menuItemData) => {
-                            if (menuItemData.success) {
-                              console.log(
-                                "Menu Item:",
-                                menuItem.itemName,
-                                "added to Menu Category:",
-                                menuCategory.categoryName,
-                                "successfully to DB"
-                              );
-                            } else {
-                              // notify user that menu item addition failed
-                              console.log("Menu Item addition failed");
-                            }
-                          });
-                        }
-                      } else {
-                        // notify user that menu category addition failed
-                        console.log("Menu Category addition failed");
+                      })
+                    );
+                    const menucategoryResponse = await fetch(
+                      "http://localhost:8080/updateRestaurant/updateSection/addMenuCategory/" +
+                        secId,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          categoryName: menuCategory.categoryName,
+                        }),
                       }
-                    });
+                    );
+                    menucategoryResponse
+                      .json()
+                      .then(async (categoryResponseData) => {
+                        if (categoryResponseData.success) {
+                          const categoryId =
+                            categoryResponseData.menuCategoryId;
+                          // console.log("category:",categoryId)
+                          console.log(
+                            "Menu Category:",
+                            menuCategory.categoryName,
+                            "added to Section:",
+                            section.sectionName,
+                            "successfully to DB"
+                          );
+                          for (const menuItem of menuCategory.menuItems) {
+                            console.log(
+                              "item adding:",
+                              JSON.stringify(menuItem)
+                            );
+                            // console.log("End point called:","http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/"+categoryId)
+                            const menuItemResponse = await fetch(
+                              "http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/" +
+                                categoryId,
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(menuItem),
+                              }
+                            );
+                            menuItemResponse
+                              .json()
+                              .then(async (menuItemData) => {
+                                if (menuItemData.success) {
+                                  console.log(
+                                    "Menu Item:",
+                                    menuItem.itemName,
+                                    "added to Menu Category:",
+                                    menuCategory.categoryName,
+                                    "successfully to DB"
+                                  );
+                                } else {
+                                  // notify user that menu item addition failed
+                                  console.log("Menu Item addition failed");
+                                }
+                              });
+                          }
+                        } else {
+                          // notify user that menu category addition failed
+                          console.log("Menu Category addition failed");
+                        }
+                      });
+                  }
+                } else {
+                  // notify user that section addition failed
+                  console.log("image addition failed");
                 }
               } else {
                 // notify user that section addition failed
@@ -191,6 +269,9 @@ const ReviewAddRestaurant = () => {
               }
             });
           }
+          console.log(
+            "-----------------------Addition of restaurant to DB successfully completed------------------------"
+          );
         } else {
           // notify user that restaurant addition failed
           console.log("Restaurant addition failed");
@@ -200,7 +281,7 @@ const ReviewAddRestaurant = () => {
       console.error("Error:", error);
     }
   };
-
+  console.log(sections);
   return (
     <Paper elevation={3} sx={{ marginTop: "1em" }}>
       <Typography variant="h3">Restaurant Details</Typography>
@@ -209,163 +290,561 @@ const ReviewAddRestaurant = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          textAlign:"left",
-          marginLeft:"8%",
-          width:"84%",
-          marginTop:"1.5em"
+          textAlign: "left",
+          marginLeft: "8%",
+          width: "84%",
+          marginTop: "1.5em",
         }}
       >
-        <Paper elevation={0} sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}>
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Restaurant Name:</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.name}</Typography>
+        <Paper
+          elevation={0}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+        >
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Restaurant Name:
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.name}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Parking Available?</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.parkingAvailable}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Parking Available?
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.parkingAvailable}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography variant="h6" sx={{ fontWeight:"bold", marginLeft:"1em" }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "bold", marginLeft: "1em" }}
+          >
             Admin
           </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Admin Name</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.admin.name}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Admin Name
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.admin.name}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Email</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.admin.email}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Email
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.admin.email}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Phone1</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.admin.phone1}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Phone1
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.admin.phone1}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Phone2</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.admin.phone2}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Phone2
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.admin.phone2}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ fontWeight:"bold", marginLeft:"1em" }} variant="h6">
+          <Typography
+            sx={{ fontWeight: "bold", marginLeft: "1em" }}
+            variant="h6"
+          >
             Location Details:
           </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Longitude</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.location.Longitude}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Longitude
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.location.Longitude}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Latitude</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.location.Latitude}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Latitude
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.location.Latitude}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Country</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.location.Country}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Country
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.location.Country}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>State</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.location.State}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            State
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.location.State}
+          </Typography>
         </Paper>
 
         <Paper
           elevation={0}
-          sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
         >
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>District</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.location.District}</Typography>
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            District
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.location.District}
+          </Typography>
         </Paper>
 
-        <Paper elevation={0} sx={{ display: "flex", flexDirection: "row", marginTop:"0.5em" }}>
-          <Typography sx={{ width: "20%", color:"#7a1860", fontWeight:"bold", marginLeft:"1em" }}>Road</Typography>
-          <Typography sx={{color:"#5e5c5e", fontWeight:"bold"}}>{restaurant.location.Road}</Typography>
+        <Paper
+          elevation={0}
+          sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+        >
+          <Typography
+            sx={{
+              width: "20%",
+              color: "#7a1860",
+              fontWeight: "bold",
+              marginLeft: "1em",
+            }}
+          >
+            Road
+          </Typography>
+          <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+            {restaurant.location.Road}
+          </Typography>
         </Paper>
       </Paper>
-      <Typography variant="h3" sx={{marginTop:"1em"}}>Sections</Typography>
+      <Typography variant="h3" sx={{ marginTop: "1em" }}>
+        Sections
+      </Typography>
       {sections.map((section) => {
         return (
           <Paper
-            elevation={0}
+            elevation={6}
             sx={{
               display: "flex",
-              flexDirection: "row",
+              flexDirection: "column",
               justifyContent: "space-evenly",
+              marginTop: "1em",
             }}
           >
-            <Paper>
-              <Typography variant="h4">section Name</Typography>
-              <Typography>Section Description </Typography>
-              <Typography>Capacity </Typography>
-              <Typography>Dine-in Available </Typography>
-              <Typography>Auto-Accept Bookings? </Typography>
-              <Typography>Catering Available? </Typography>
-              <Typography>Avg Cost </Typography>
-              <Typography>Rating </Typography>
-              <Typography>Reservation Charge </Typography>
-              <Typography>SecImg </Typography>
-              <Typography>Menu </Typography>
-              <Typography>Timing </Typography>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                section Name
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.sectionName}
+              </Typography>
             </Paper>
-            <Paper>
-              <Typography>{section.sectionName}</Typography>
-              <Typography>{section.sectionDescription} </Typography>
-              <Typography>{section.capacity} </Typography>
-              <Typography>{section.dineinAvailable} </Typography>
-              <Typography>{section.autoAcceptBookings} </Typography>
-              <Typography>{section.cateringAvailable} </Typography>
-              <Typography>{section.avgCost} </Typography>
-              <Typography>{section.rating} </Typography>
-              <Typography>{section.reservationCharge} </Typography>
-              <Typography>{JSON.stringify(section.secImg)} </Typography>
-              <Typography>{JSON.stringify(section.menu)} </Typography>
-              <Typography>{JSON.stringify(section.timing)} </Typography>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Section Description
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.sectionDescription}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Capacity
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.capacity}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Dine-in available:
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.dineinAvailable}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Auto accepts bookings:
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.autoAcceptBookings}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Catering Available:
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.cateringAvailable}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Avg cost per 2 persons
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.avgCost}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Rating
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.rating}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Reservation Charge
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.reservationCharge}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Images
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {JSON.stringify(section.secImg)}
+              </Typography>
+            </Paper>
+            
+              <Typography
+              variant="h3"
+                sx={{
+                  width: "100%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                  textAlign:'center',
+                  display: "flex",
+                  justifyContent:'center',
+                  alignItems:'center'
+                }}
+              >
+                Menu
+              </Typography>
+              <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em",justifyContent:'space-around' }}
+            >
+              <Typography>
+                {Array.from(section.menu).map((menu) => (
+                  <Paper
+                    elevation={0}
+                    sx={{ display: "flex", flexDirection: "row" }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", color: "#444545",display: "flex",alignItems: "center", }}
+                    >
+                      {menu.categoryName}
+                    </Typography>
+                    {menu.menuItems.map((item) => (
+                      <Paper
+                        elevation={0}
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          marginLeft: "1em",
+                          marginTop: "1em",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography
+                          sx={{ fontWeight: "bold", color: "#7a1860" }}
+                        >
+                          {item.itemName}
+                        </Typography>
+                        <Paper
+                          elevation={0}
+                          sx={{ display: "flex", flexDirection: "column" }}
+                        >
+                          {item.quantities.map((quantity) => (
+                            <Typography
+                              variant="body1"
+                              sx={{ marginLeft: "1.5em", textAlign: "left" }}
+                            >
+                              {quantity.quantity}({quantity.cost}/-)(avgPersons:
+                              {quantity.avgPersons})
+                            </Typography>
+                          ))}
+                        </Paper>
+                      </Paper>
+                    ))}
+                  </Paper>
+                ))}
+                {/* <h1>{JSON.stringify(section.menu)}</h1> */}
+              </Typography>
+            
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                Timings
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {Object.keys(section.timing).map((day) => <Typography>{day}:{section.timing[day].open_time} to {section.timing[day].close_time}</Typography>)}
+              </Typography>
+              {/* {
+                (section.timing).map((item)=>{
+<h1>{item}</h1>
+                })
+              } */}
             </Paper>
           </Paper>
         );
       })}
-      <Button onClick={(event) => addRestaurantToDB(event)}>Submit</Button>
+      <Button
+        variant="contained"
+        sx={{ margin: "1em" }}
+        onClick={(event) => addRestaurantToDB(event)}
+      >
+        Submit
+      </Button>
     </Paper>
   );
 };
