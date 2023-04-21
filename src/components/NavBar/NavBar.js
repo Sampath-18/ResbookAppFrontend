@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import { InputBase } from '@mui/material';
+import { UserContext } from '../contexts/UserContext';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -67,6 +68,20 @@ function NavBar() {
   // console.log(Object.keys(pages));
   const navigate = useNavigate();
 
+  const onProfileClick = () => {
+    if(user)
+    {
+      const userId = user._id
+      console.log("Navigating to profilePage/"+userId);
+      navigate("/ProfilePage/"+userId)
+    }
+    else{
+      alert("Login to view your profile!!")
+    }
+  }
+
+  const {user, login, logout} = React.useContext(UserContext);
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -80,6 +95,15 @@ function NavBar() {
 
   const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
+    if(setting === "Logout"){
+      // console.log("")
+      logout()
+    }
+    else if(setting === "Profile")
+    {
+      onProfileClick();
+      return
+    }
     navigate(settings[setting]);
   };
 

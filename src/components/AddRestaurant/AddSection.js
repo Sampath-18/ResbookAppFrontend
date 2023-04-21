@@ -2,7 +2,6 @@ import { Paper, Button, Grid } from "@mui/material";
 import React from "react";
 
 import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom";
 import MenuIntake from "./MenuIntake";
 import TimingsIntake from "./TimingsIntake";
 import { Container } from "@mui/system";
@@ -11,6 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import PhotoUploader from "./PhotoUploader";
 
 const AddSection = (props) => {
   const handleRemoveSection = () => {
@@ -18,10 +18,15 @@ const AddSection = (props) => {
     props.onRemove();
   };
 
-  const navigate = useNavigate();
-
   return (
     <>
+    <Container
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "column",
+        }}
+      >
       <Container
         sx={{
           display: "flex",
@@ -73,16 +78,16 @@ const AddSection = (props) => {
                   onChange={(event) => props.onChange(event)}
                 />
               </Grid>
-              <Grid item xs={2} sm={4} md={4}>
+              {/* <Grid item xs={2} sm={4} md={4}>
                 <TextField
                   id="outlined-basic"
                   label="photos"
                   variant="outlined"
-                  value={props.photos}
-                  name="photos"
+                  value={props.secImg}
+                  name="secImg"
                   onChange={(event) => props.onChange(event)}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={2} sm={4} md={4}>
                 <Box sx={{}}>
                   <FormControl style={{ width: "100%" }}>
@@ -92,8 +97,8 @@ const AddSection = (props) => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={props.catering}
-                      name="catering"
+                      value={props.cateringAvailable}
+                      name="cateringAvailable"
                       label="Catering available?"
                       onChange={(event) => props.onChange(event)}
                     >
@@ -103,16 +108,6 @@ const AddSection = (props) => {
                   </FormControl>
                 </Box>
               </Grid>
-              {/* <Grid item xs={2} sm={4} md={4}>
-                <TextField
-                  id="outlined-basic"
-                  label="catering avaiable?"
-                  variant="outlined"
-                  value={props.catering}
-                  name="catering"
-                  onChange={(event) => props.onChange(event)}
-                />
-              </Grid> */}
               <Grid item xs={2} sm={4} md={4}>
                 <TextField
                   id="outlined-basic"
@@ -142,9 +137,9 @@ const AddSection = (props) => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={props.dinein}
+                      value={props.dineinAvailable}
                       label="Dine-in available"
-                      name="dinein"
+                      name="dineinAvailable"
                       onChange={(event) => props.onChange(event)}
                     >
                       <MenuItem value="Yes">Yes</MenuItem>
@@ -173,8 +168,8 @@ const AddSection = (props) => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={props.autoAccept}
-                      name="autoAccept"
+                      value={props.autoAcceptBookings}
+                      name="autoAcceptBookings"
                       label="AutoAccept Bookings"
                       onChange={(event) => props.onChange(event)}
                     >
@@ -184,16 +179,6 @@ const AddSection = (props) => {
                   </FormControl>
                 </Box>
               </Grid>
-              {/* <Grid item xs={2} sm={4} md={4}>
-                <TextField
-                  id="outlined-basic"
-                  label="Auto accept booking?"
-                  variant="outlined"
-                  value={props.autoAccept}
-                  name="autoAccept"
-                  onChange={(event) => props.onChange(event)}
-                />
-              </Grid> */}
               <Grid item xs={4} sm={8} md={8}>
                 <TextField
                   label="Description"
@@ -202,8 +187,8 @@ const AddSection = (props) => {
                   multiline
                   fullWidth
                   minRows={4}
-                  value={props.description}
-                  name="description"
+                  value={props.sectionDescription}
+                  name="sectionDescription"
                   onChange={(event) => props.onChange(event)}
                 />
               </Grid>
@@ -213,7 +198,7 @@ const AddSection = (props) => {
             </Button> */}
 
           </Paper>
-          <MenuIntake />
+          <MenuIntake setMenu={(menu) => props.setMenu(menu)} />
         </Container>
         <Container
           sx={{
@@ -223,7 +208,7 @@ const AddSection = (props) => {
             width: "35%",
           }}
         >
-          <TimingsIntake timings={props.timings} />
+          <TimingsIntake timing={props.timing} setTimings={(timing) => props.setTimings(timing)} />
           <Button
             sx={{ marginTop: "1em" }}
             variant="contained"
@@ -233,6 +218,10 @@ const AddSection = (props) => {
           </Button>
         </Container>
       </Container>
+      <Container sx={{marginTop:"1em"}}>
+        <PhotoUploader setSecImg={(secImg) => props.setSecImg(secImg)} />
+      </Container>
+    </Container>
     </>
   );
 };
