@@ -72,9 +72,7 @@ const Reviews = (props) => {
     }
     // console.log(reviews)
   };
-
   
-
   useEffect(() => {
     const fetchReviews = async() => {
       // console.log("props",props);
@@ -104,9 +102,12 @@ const Reviews = (props) => {
       }
     }
     fetchReviews()
+    console.log("props in reviews updated");
   }, [props]);
 
   return (
+    props.reviews
+    ?
     <Paper elevation={3} sx={{ marginTop: "1em  " }}>
       <Typography variant="h4" fontWeight="bold" marginLeft="1em">
         Ratings & Reviews({props.reviews.length})
@@ -275,6 +276,8 @@ const Reviews = (props) => {
       }
       <Button variant="contained" sx={{margin:"1em"}} onClick={onAdd3ReviewsClick}>Show more</Button>
     </Paper>
+    :
+    <>Loading reviews....</>
   );
 };
 

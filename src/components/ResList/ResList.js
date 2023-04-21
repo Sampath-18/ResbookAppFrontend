@@ -120,7 +120,7 @@ const ResList = () => {
     },[])
     React.useEffect(() => {
         async function fetchUserLikings() {
-            console.log("called");
+            // console.log("called");
             if(!user)
             {
                 console.log("Couldn't fetch user likings because user hasn't logged in!!");
@@ -136,7 +136,7 @@ const ResList = () => {
                 userlikings = await userlikings.json()
                 if(userlikings.success)
                 {
-                    console.log("likings set");
+                    // console.log("likings set");
                     setUserLikings(userlikings.userlikings)
                 }
                 else
@@ -161,7 +161,7 @@ const ResList = () => {
 
     return (
         restaurants===null ? 
-        <Typography variant="h4">Loading.....</Typography>
+        <Typography variant="h4">Don't get upset, poonakalu Loading.....</Typography>
         :
         <Container sx={{top : "15%"}}>
             <Box sx={{ flexGrow: 1 }}>

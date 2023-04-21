@@ -38,8 +38,8 @@ const Restaurant = () => {
   const [restaurantFE, setRestaurantFE] = useState(null);
   const [allBookings, setAllBookings] = useState([]);
 
-  const location = useLocation();
-  const [userlikings,setUserlikings] = useState(location.state.userlikings)
+  // const location = useLocation();
+  const [userlikings,setUserlikings] = useState(null)//location.state.userlikings)
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -114,6 +114,38 @@ const Restaurant = () => {
     
   }, []);
 
+  React.useEffect(() => {
+      async function fetchUserLikings() {
+          // console.log("called");
+          if(!user)
+          {
+              console.log("Couldn't fetch user likings because user hasn't logged in!!");
+              return
+          }
+          try {
+              let userLikings = await fetch("http://localhost:8080/getUserLikings/"+user._id,{
+                  method:"GET",
+                  headers:{
+                      "Content-Type":"application/json"
+                  }
+              })
+              userLikings = await userLikings.json()
+              if(userLikings.success)
+              {
+                  console.log("likings set in restaurant.js");
+                  setUserlikings(userLikings.userlikings)
+              }
+              else
+              {
+                  console.log(userLikings.message);
+              }
+          } catch (error) {
+              console.error(error);
+          }
+      }
+      fetchUserLikings()
+  }, [user])
+
   useEffect(() => {
     setCurrentSection(restaurantFE ? restaurantFE.sections[0] : null);
     if(currentSection)
@@ -165,7 +197,7 @@ const Restaurant = () => {
       }
       if(userlikings)
       {
-        console.log("called",userlikings.favSections.findIndex(sec => sec===currSecId),userlikings.savedSections.findIndex(sec => sec===currSecId));
+        // console.log("called",userlikings.favSections.findIndex(sec => sec===currSecId),userlikings.savedSections.findIndex(sec => sec===currSecId));
         setIsFavoriteSection(userlikings.favSections.findIndex(sec => sec===currSecId)!==-1)
         setIsSavedSection(userlikings.savedSections.findIndex(sec => sec===currSecId)!==-1)
       }
@@ -410,7 +442,7 @@ const Restaurant = () => {
                       {currentSection.sectionName}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {currentSection.avgCost} for 2|Continental, Asian, Italian
+                      {currentSection.avgCost} for 2|{currentSection.cuisines.toString()}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       {restaurantFE.location.District}
