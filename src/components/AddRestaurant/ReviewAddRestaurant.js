@@ -718,6 +718,42 @@ const ReviewAddRestaurant = () => {
                   marginLeft: "1em",
                 }}
               >
+                cuisines
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.cuisines.toString()}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
+                searchTags
+              </Typography>
+              <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
+                {section.searchTags.toString()}
+              </Typography>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{ display: "flex", flexDirection: "row", marginTop: "0.5em" }}
+            >
+              <Typography
+                sx={{
+                  width: "20%",
+                  color: "#7a1860",
+                  fontWeight: "bold",
+                  marginLeft: "1em",
+                }}
+              >
                 Reservation Charge
               </Typography>
               <Typography sx={{ color: "#5e5c5e", fontWeight: "bold" }}>
