@@ -27,6 +27,9 @@ import { UserContext } from "./components/contexts/UserContext";
 import { useContext } from "react";
 import ReviewAddRestaurant from "./components/AddRestaurant/ReviewAddRestaurant";
 import MenuItemComponent from "./components/Menu/MenuItemComponent";
+import PersistentDrawerLeft from "./components/AdminView/AdminDetails";
+import ResponsiveDrawer from "./components/AdminView/AdminDetails";
+import MyProfile from "./components/AdminView/MyProfile";
 // import { DataContext } from "./components/contexts/UserContext";
 
 
@@ -42,6 +45,7 @@ function App(props) {
         }
         <Routes>
           <Route exact path="/" element={<Home />} />
+          
           <Route exact path="/Restaurants/:id" element={<Restaurant />} />
           <Route exact path="/RestaurantIntake" element={<RestaurantIntake />} />
           <Route exact path="/SectionIntake" element={<SectionsIntake />} />
@@ -64,6 +68,9 @@ function App(props) {
           <Route exact path="/GeolocationComponent" element={<GeolocationComponent />} />
           <Route exact path="/ReviewAddRestaurant" element={<ReviewAddRestaurant />} />
           <Route exact path="/MenuItemComponent" element={<MenuItemComponent />} />
+        {/* admin */}
+        <Route exact path='/admin' element={<ResponsiveDrawer/>}/>
+        <Route exact path='/profile' element={<MyProfile/>}/>
         </Routes>
       </div>
   );
