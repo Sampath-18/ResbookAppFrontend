@@ -1,25 +1,26 @@
 import React from 'react'
 import { Box } from '@mui/material';
-import AdminPage from '../AdminView/AdminDetails'
+
+const drawerWidth = 240;
+
 const MyProfile = () => {
   return (
-    <>
-    <AdminPage/>
         <Box
           sx={{
+            // width: { sm: `calc(100% - ${drawerWidth}px)` },
             width: 300,
             height: 300,
-            backgroundColor: 'primary.dark',
+            color: 'black',
+            backgroundColor: 'primary',
             '&:hover': {
               backgroundColor: 'primary.main',
               opacity: [0.9, 0.8, 0.7],
             },
           }}
-        />
-      </>);
+        >
+          My Profile Details here..
+        </Box>
+      );
     }
-    
-  
-
 
 export default MyProfile

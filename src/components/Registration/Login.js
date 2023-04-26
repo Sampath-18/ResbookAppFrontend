@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 import {
   Button,
@@ -7,6 +9,7 @@ import {
   Paper,
   TextField,
   InputAdornment,
+  Typography,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 
@@ -22,42 +25,140 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const [isRestaurantLogin, setIsRestaurantLogin] = useState(false);
+
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+
+  const [forgotDetails, setForgotDetails] = useState({
+    email: "",
+    password: "",
+    cpassword: "",
+  });
+
+  const setNewPassword = async () => {
+    try {
+      // console.log("new password called");
+      // console.log(forgotDetails)
+      if (isRestaurantLogin) {
+        const response = await fetch(
+          "http://localhost:8080/setRestaurantPassword",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(forgotDetails),
+          }
+        );
+        const responseJson = await response.json();
+        // console.log("Login status:", responseJson);
+        // console.log("json", responseJson);
+        if (!responseJson.success) {
+          alert("Failed to set New password for restaurant");
+        } else {
+          alert("New password fpr restaurant set successfully");
+          // login(responseJson.user);
+          // console.log("Logged in successfully!!!");
+          // navigate("/");
+        }
+        setIsForgotPassword(false);
+      } else {
+        const response = await fetch("http://localhost:8080/setUserPassword", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(forgotDetails),
+        });
+        const responseJson = await response.json();
+        // console.log("Login status:", responseJson);
+        // console.log("json", responseJson);
+        if (!responseJson.success) {
+          alert("Failed to set New password for user");
+        } else {
+          alert("New password for user set successfully");
+          // login(responseJson.user);
+          // console.log("Logged in successfully!!!");
+          // navigate("/");
+        }
+        setIsForgotPassword(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const { user, login, logout } = useContext(UserContext);
 
-  const [loginDetails, setLoginDetails] = useState({email:"", password:""})
+  const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
 
   const handleDetailChange = (event) => {
-    setLoginDetails({...loginDetails, [event.target.name]: event.target.value})
-  }
+    setLoginDetails({
+      ...loginDetails,
+      [event.target.name]: event.target.value,
+    });
+  };
 
-  const handleSubmit = async (event) => {
+  const handleForgotDetailChange = (event) => {
+    setForgotDetails({
+      ...forgotDetails,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleUserLogin = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch("http://localhost:8080/login",{
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          body: JSON.stringify(loginDetails)
-        })
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginDetails),
+      });
       const responseJson = await response.json();
-      console.log("Login status:",responseJson);
+      console.log("Login status:", responseJson);
       console.log("json", responseJson);
-      if(!responseJson.success)
-      {
+      if (!responseJson.success) {
         alert("Enter Valid credentials");
-      }
-      else
-      {
+      } else {
         // alert("Logged in successfully!!!");
         login(responseJson.user);
         console.log("Logged in successfully!!!");
-        navigate('/');
+        navigate("/");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
+
+  const handleRestaurantLogin = async (event) => {
+    try {
+      console.log("Restaurant login tried!");
+      event.preventDefault()
+      const response = await fetch("http://localhost:8080/restaurantLogin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginDetails),
+      });
+      const responseJson = await response.json();
+      // console.log("Login status:", responseJson);
+      // console.log("json", responseJson);
+      if (!responseJson.success) {
+        alert("Enter Valid Restaurant credentials");
+      } else {
+        alert("Logged in successfully!!!");
+        // login(responseJson.user);
+        // console.log("Logged in successfully!!!");
+        // navigate("/");
+        navigate("/RestaurantAdminView/"+responseJson.restaurantId)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -75,79 +176,143 @@ const Login = () => {
             ></img>
           </Grid>
 
-          <Grid item xs={6}>
-            <Grid align="center">
-              <h2 style={headerStyle}>To continue,Please Login into Resbook</h2>
-              {/* <Typography variant="caption">
+          {isForgotPassword ? (
+            <Grid item xs={6}>
+              <Grid align="center">
+                <h2 style={headerStyle}>
+                  Forgot {isRestaurantLogin ? "Restaurant" : "User"} Credentials
+                </h2>
+
+                <form width={500}>
+                  <TextField
+                    color="secondary"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    placeholder="enter your email"
+                    type="email"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="email"
+                    value={forgotDetails.email}
+                    onChange={(event) => handleForgotDetailChange(event)}
+                  ></TextField>
+
+                  <TextField
+                    color="secondary"
+                    variant="outlined"
+                    fullWidth
+                    placeholder="Enter New Password"
+                    margin="normal"
+                    type="password"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="password"
+                    value={forgotDetails.password}
+                    onChange={(event) => handleForgotDetailChange(event)}
+                  ></TextField>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    placeholder="Confirm New Password"
+                    margin="normal"
+                    color="secondary"
+                    type="password"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="cpassword"
+                    value={forgotDetails.cpassword}
+                    onChange={(event) => handleForgotDetailChange(event)}
+                  ></TextField>
+                </form>
+              </Grid>
+
+              <Button
+                sx={{ backgroundColor: "pink", color: "green" }}
+                onClick={() => setNewPassword()}
+              >
+                Submit
+              </Button>
+              <Button
+                sx={{ backgroundColor: "pink", color: "green" }}
+                onClick={() => setIsForgotPassword(!isForgotPassword)}
+              >
+                Back
+              </Button>
+            </Grid>
+          ) : (
+            <Grid item xs={6}>
+              <Grid align="center">
+                <h2 style={headerStyle}>
+                  To continue,Please Login into Resbook
+                </h2>
+                {/* <Typography variant="caption">
                 please fill the account details
               </Typography> */}
 
-              <form width={500}>
-                <TextField
-                  color="secondary"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  placeholder="enter your email"
-                  type="email"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  name="email"
-                  value={loginDetails.email}
-                  onChange={(event) => handleDetailChange(event)}
-                ></TextField>
+                <form width={500}>
+                  <TextField
+                    color="secondary"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    placeholder="enter your email"
+                    type="email"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="email"
+                    value={loginDetails.email}
+                    onChange={(event) => handleDetailChange(event)}
+                  ></TextField>
 
-                <TextField
-                  color="secondary"
-                  variant="outlined"
-                  fullWidth
-                  placeholder="Enter Your Password"
-                  margin="normal"
-                  type="password"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  name="password"
-                  value={loginDetails.password}
-                  onChange={(event) => handleDetailChange(event)}
-                ></TextField>
+                  <TextField
+                    color="secondary"
+                    variant="outlined"
+                    fullWidth
+                    placeholder="Enter Your Password"
+                    margin="normal"
+                    type="password"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="password"
+                    value={loginDetails.password}
+                    onChange={(event) => handleDetailChange(event)}
+                  ></TextField>
 
-                <Button
-                  sx={{
-                    borderRadius: "4rem",
-                    width: "10rem",
-                    height: "3.5rem",
-                    fontSize: "1rem",
-                    "&:hover": {
-                      backgroundColor: "rgb(67, 110, 24)",
-                      color: "white",
-                    },
-                  }}
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  style={marginStyle}
-                  onClick={(event) => handleSubmit(event)}
-                >
-                  Login
-                </Button>
-                <hr></hr>
-                <h4 className="lgfont">Don't Have an Account?</h4>
-
-                <Link to="/signup">
+                  <Button
+                    onClick={() => setIsForgotPassword(!isForgotPassword)}
+                  >
+                    forgot Password?
+                  </Button>
                   <Button
                     sx={{
                       borderRadius: "4rem",
-                      width: "20rem",
+                      width: "10rem",
                       height: "3.5rem",
                       fontSize: "1rem",
                       "&:hover": {
@@ -155,15 +320,55 @@ const Login = () => {
                         color: "white",
                       },
                     }}
-                    type="button"
+                    type="submit"
                     variant="contained"
+                    color="primary"
+                    style={marginStyle}
+                    onClick={(event) => {
+                      isRestaurantLogin
+                        ? handleRestaurantLogin(event)
+                        : handleUserLogin(event);
+                    }}
                   >
-                    signup for Resbook
+                    Login
                   </Button>
-                </Link>
-              </form>
+                  <hr></hr>
+                  <h4 className="lgfont">Don't Have an Account?</h4>
+
+                  <Link to="/signup">
+                    <Button
+                      sx={{
+                        borderRadius: "4rem",
+                        width: "20rem",
+                        height: "3.5rem",
+                        fontSize: "1rem",
+                        "&:hover": {
+                          backgroundColor: "rgb(67, 110, 24)",
+                          color: "white",
+                        },
+                      }}
+                      type="button"
+                      variant="contained"
+                    >
+                      signup for Resbook
+                    </Button>
+                  </Link>
+
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isRestaurantLogin}
+                        onChange={() => {
+                          setIsRestaurantLogin(!isRestaurantLogin);
+                        }}
+                      />
+                    }
+                    label="Restaurant Login?"
+                  />
+                </form>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </Grid>
       </Paper>
     </>
