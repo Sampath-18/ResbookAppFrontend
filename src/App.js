@@ -30,6 +30,8 @@ import MenuItemComponent from "./components/Menu/MenuItemComponent";
 import MyProfile from "./components/AdminView/MyProfile";
 import AdminView from "./components/AdminView/AdminView";
 // import { DataContext } from "./components/contexts/UserContext";
+import FavCuisineSelection from "./components/CustomerModule/FavCuisineSelection";
+import MenuItem from "./components/Menu/MenuItem";
 
 
 function App(props) {
@@ -67,9 +69,11 @@ function App(props) {
           <Route exact path="/GeolocationComponent" element={<GeolocationComponent />} />
           <Route exact path="/ReviewAddRestaurant" element={<ReviewAddRestaurant />} />
           <Route exact path="/MenuItemComponent" element={<MenuItemComponent />} />
+          <Route exact path="/FavCuisineSelection/:id" element={<FavCuisineSelection />} />
         {/* admin */}
         <Route exact path='/RestaurantAdminView/:id' element={<AdminView/>}/>
         <Route exact path='/profile' element={<MyProfile/>}/>
+        <Route exact path='/MenuItem' element={<MenuItem/>}/>
         </Routes>
       </div>
   );
