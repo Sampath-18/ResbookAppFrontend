@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import logo from "../../assets/img/logo.png"
 
 import {
   Button,
@@ -135,7 +136,7 @@ const Login = () => {
   const handleRestaurantLogin = async (event) => {
     try {
       console.log("Restaurant login tried!");
-      event.preventDefault()
+      event.preventDefault();
       const response = await fetch("http://localhost:8080/restaurantLogin", {
         method: "POST",
         headers: {
@@ -153,7 +154,7 @@ const Login = () => {
         // login(responseJson.user);
         // console.log("Logged in successfully!!!");
         // navigate("/");
-        navigate("/RestaurantAdminView/"+responseJson.restaurantId)
+        navigate("/RestaurantAdminView/" + responseJson.restaurantId);
       }
     } catch (error) {
       console.error(error);
@@ -165,11 +166,23 @@ const Login = () => {
       <Paper elevation={20} style={paperStyle}>
         <Grid container>
           <Grid item xs={6}>
-            <div>here we wil set the logo later</div>
+            <div>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isRestaurantLogin}
+                    onChange={() => {
+                      setIsRestaurantLogin(!isRestaurantLogin);
+                    }}
+                  />
+                }
+                label="Restaurant Login?"
+              />
+            </div>
             <img
               className="img1"
-              src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-              alt="error"
+              src={logo}
+              alt="logo"
               height={350}
               width={350}
               style={imgstyle}
@@ -353,18 +366,6 @@ const Login = () => {
                       signup for Resbook
                     </Button>
                   </Link>
-
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={isRestaurantLogin}
-                        onChange={() => {
-                          setIsRestaurantLogin(!isRestaurantLogin);
-                        }}
-                      />
-                    }
-                    label="Restaurant Login?"
-                  />
                 </form>
               </Grid>
             </Grid>

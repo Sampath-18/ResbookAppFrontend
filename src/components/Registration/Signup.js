@@ -51,7 +51,7 @@ const Signup = () => {
         else
         {
           setUser(data.user)
-          navigate("/")
+          navigate("/FavCuisineSelection/"+data.userId)
         }
       })
       .catch(err => {console.error(err)})      

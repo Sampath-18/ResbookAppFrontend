@@ -79,7 +79,7 @@ function AdminDetails(props) {
             <FormControlLabel
               control={
                 <Switch
-                  checked={restaurant.currentStatus}
+                  checked={restaurant.currentStatus==="Open"}
                   // onChange={() => {
                   //   setIsRestaurantLogin(!isRestaurantLogin);
                   // }}
