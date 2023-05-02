@@ -136,7 +136,7 @@ const AdminView = (props) => {
           {/* </Link> */}
         </ListItem>
         <ListItem key={"Restaurant Details1"} disablePadding>
-          <Accordion sx={{width:'100%',}}>
+          <Accordion sx={{ width: "100%" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -144,27 +144,26 @@ const AdminView = (props) => {
             >
               <Typography>Sections</Typography>
             </AccordionSummary>
-            {
-              restaurant ?
-            <AccordionDetails  >
-              {restaurant.sections.map((section, index) => (
-                <ListItemButton
-                  key={index}
-                  onClick={() => setSelectedComponent(<SectionAdminView />)}
-                >
-                  <ListItemIcon>
-                    {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={section.sectionName}
-                    style={{ color: "black" }}
-                  />
-                </ListItemButton>
-              ))}
-            </AccordionDetails>
-            :
-            <Typography>poonakalu loading</Typography>
-            }
+            {restaurant ? (
+              <AccordionDetails>
+                {restaurant.sections.map((section, index) => (
+                  <ListItemButton
+                    key={index}
+                    onClick={() => setSelectedComponent(<SectionAdminView section={section} />)}
+                  >
+                    <ListItemIcon>
+                      {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={section.sectionName}
+                      style={{ color: "black" }}
+                    />
+                  </ListItemButton>
+                ))}
+              </AccordionDetails>
+            ) : (
+              <Typography>poonakalu loading</Typography>
+            )}
           </Accordion>
         </ListItem>
         {[
@@ -175,7 +174,7 @@ const AdminView = (props) => {
             text: "Remove Restaurant",
             component: <div>Remove section here</div>,
           },
-          { text: "Profile", component: <MyProfile /> },
+          { text: "Profile", component: <MyProfile restaurant={restaurant} /> },
           { text: "Log Out", component: <div>Logout</div> },
         ].map(({ text, component }, index) => (
           <ListItem key={text} disablePadding>
