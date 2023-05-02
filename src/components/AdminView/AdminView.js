@@ -1,5 +1,5 @@
 // import React from 'react'
-import * as React from "react";
+import  React,{useEffect,useState} from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -30,9 +30,11 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const drawerWidth = 240;
 
+
+
 const AdminView = (props) => {
   const { id } = useParams();
-
+  const [restaurant, setRestaurant] = React.useState(null);
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [selectedComponent, setSelectedComponent] = React.useState(<Box>No selection</Box>)
@@ -40,6 +42,29 @@ const AdminView = (props) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  async function fetchRestaurant(restaurantId) {
+    try {
+      const restaurantResponse = await fetch(
+        "http://localhost:8080/getRestaurant/"+restaurantId,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const restaurantJson = await restaurantResponse.json();
+      if (restaurantJson.success) {
+        setRestaurant(restaurantJson.restaurant);
+        console.log("fetched restaurant:"+restaurantJson.restaurant.name);
+      } else {
+        console.log("No Restaurants");
+        // setIsLoaded(false)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const drawer = (
     <div>
@@ -47,7 +72,7 @@ const AdminView = (props) => {
       <Divider />
       <List>
         {[
-          { text: "Restaurant Details", component: <AdminDetails restaurantId={id} /> },
+          { text: "Restaurant Details", component: <AdminDetails restaurant={restaurant} /> },
           { text: "Sections", component: <SectionAdminView /> },
           { text: "Statistics", component: <div>Restaurant Stats Here</div> },
           { text: "Bookings", component: <div>All Bookings here</div> },
@@ -74,7 +99,9 @@ const AdminView = (props) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-
+    useEffect(()=>{
+      fetchRestaurant(id)
+      },[])
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
