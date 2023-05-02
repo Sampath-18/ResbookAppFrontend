@@ -12,43 +12,43 @@ import Switch from "@mui/material/Switch";
 const drawerWidth = 240;
 
 function AdminDetails(props) {
-  const [restaurant, setRestaurant] = React.useState(null);
+  // const [restaurant, setRestaurant] = React.useState(props.restaurant);
 
-  async function fetchRestaurant(restaurantId) {
-    try {
-      const restaurantResponse = await fetch(
-        "http://localhost:8080/getRestaurant/"+restaurantId,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const restaurantJson = await restaurantResponse.json();
-      if (restaurantJson.success) {
-        setRestaurant(restaurantJson.restaurant);
-        console.log("fetched restaurant:"+restaurantJson.restaurant.name);
-      } else {
-        console.log("No Restaurants");
-        // setIsLoaded(false)
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function fetchRestaurant(restaurantId) {
+  //   try {
+  //     const restaurantResponse = await fetch(
+  //       "http://localhost:8080/getRestaurant/"+restaurantId,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const restaurantJson = await restaurantResponse.json();
+  //     if (restaurantJson.success) {
+  //       setRestaurant(restaurantJson.restaurant);
+  //       console.log("fetched restaurant:"+restaurantJson.restaurant.name);
+  //     } else {
+  //       console.log("No Restaurants");
+  //       // setIsLoaded(false)
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const updateRestaurant = async(event) => {
     
   }
 
-  React.useEffect(() => {
-    // let rId = props.restaurantId;
-    fetchRestaurant(props.restaurantId)
-  }, [props]);
+  // React.useEffect(() => {
+  //   // let rId = props.restaurantId;
+  //   fetchRestaurant(props.restaurantId)
+  // }, [props]);
 
   return (
-    restaurant == null ?
+    props.restaurant == null ?
     <div>Restaurant Loading.....</div>
     :
     <Box
@@ -71,7 +71,7 @@ function AdminDetails(props) {
         <Grid container spacing={3}>
           <Grid item xs={5}>
             <Typography variant="h5" noWrap component="div" color="white">
-              {restaurant.name}
+              {props.restaurant.name}
             </Typography>
           </Grid>
 
@@ -79,7 +79,7 @@ function AdminDetails(props) {
             <FormControlLabel
               control={
                 <Switch
-                  checked={restaurant.currentStatus==="Open"}
+                  checked={props.restaurant.currentStatus==="Open"}
                   // onChange={() => {
                   //   setIsRestaurantLogin(!isRestaurantLogin);
                   // }}
@@ -117,8 +117,8 @@ function AdminDetails(props) {
 
       <img
         style={{ width: "90%", height: "400px", marginTop: "1em", }}
-        src={restaurant.coverImage.url}
-        alt={restaurant.coverImage.public_id}
+        src={props.restaurant.coverImage.url}
+        alt={props.restaurant.coverImage.public_id}
       ></img>
 
       <Box
@@ -143,7 +143,7 @@ function AdminDetails(props) {
             Avg cost per person :
           </Typography>
           <Typography variant="h5" noWrap component="div" color="white">
-            {restaurant.avgCost}
+            {props.restaurant.avgCost}
           </Typography>
         </Box>
 
@@ -171,7 +171,7 @@ function AdminDetails(props) {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={restaurant.parkingAvailable === "Yes"}
+                    checked={props.restaurant.parkingAvailable === "Yes"}
                     // onChange={() => {
                     //   setIsRestaurantLogin(!isRestaurantLogin);
                     // }}
@@ -195,7 +195,7 @@ function AdminDetails(props) {
         }}
       >
         <Typography>
-          Restaurant Ratings : <Rating name="size-large" value={restaurant.rating.toFixed(2)} />
+          Restaurant Ratings : <Rating name="size-large" value={props.restaurant.rating.toFixed(2)} />
         </Typography>
       </Box>
     </Box>
