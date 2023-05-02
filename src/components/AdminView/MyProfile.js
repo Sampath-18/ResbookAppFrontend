@@ -15,7 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const MyProfile = () => {
+const MyProfile = (props) => {
   return (
     <Container sx={{ display: "flex", gap: "3em" }}>
       <Box
@@ -33,8 +33,8 @@ const MyProfile = () => {
       >
         <img
           style={{ width: 500, height: 500 }}
-          src="https://www.shutterstock.com/image-illustration/hotel-sign-stars-3d-illustration-260nw-195879770.jpg"
-          alt="profile pic"
+          src={props.restaurant.coverImage.url}
+          alt="Restaurant cover pic"
         ></img>
       </Box>
       <Box
@@ -61,25 +61,25 @@ const MyProfile = () => {
             <Item><Typography variant='h5'>Name :</Typography></Item> 
             </Grid>
             <Grid item xs={6}>
-              <Item><Typography variant='h5'>Srinivas Naik</Typography></Item> 
+              <Item><Typography variant='h5'>{props.restaurant.admin.name}</Typography></Item> 
             </Grid>
             <Grid item xs={6}>
               <Item><Typography variant='h5'>Email :</Typography></Item> {" "}
             </Grid>
             <Grid item xs={6}>
-              <Item><Typography variant='h5'>srinu@gmail.com</Typography></Item> {" "}
+              <Item><Typography variant='h5'>{props.restaurant.admin.email}</Typography></Item> {" "}
             </Grid>
             <Grid item xs={6}>
               <Item><Typography variant='h5'>Phone :</Typography></Item> {" "}
             </Grid>
             <Grid item xs={6}>
-              <Item><Typography variant='h5'>9391105600</Typography></Item> {" "}
+              <Item><Typography variant='h5'>{props.restaurant.admin.phone1}</Typography></Item> {" "}
             </Grid>
             <Grid item xs={6}>
               <Item><Typography variant='h5'>Phone2 :</Typography></Item> {" "}
             </Grid>
             <Grid item xs={6}>
-              <Item><Typography variant='h5'>9012354775</Typography></Item> {" "}
+              <Item><Typography variant='h5'>{props.restaurant.admin.phone2}</Typography></Item> {" "}
             </Grid>
           </Grid>
         </Box>
