@@ -1,5 +1,5 @@
 // import React from 'react'
-import  React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,6 +19,11 @@ import AdminDetails from "./AdminDetails";
 import SectionAdminView from "./SectionAdminView";
 import MyProfile from "./MyProfile";
 import { useParams } from "react-router-dom";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -30,22 +35,24 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const drawerWidth = 240;
 
-
-
 const AdminView = (props) => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = React.useState(null);
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [selectedComponent, setSelectedComponent] = React.useState(<Box>No selection</Box>)
+  const [selectedComponent, setSelectedComponent] = React.useState(
+    <Box>No selection</Box>
+  );
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  // console.log("called");
   async function fetchRestaurant(restaurantId) {
+    // console.log("called");
     try {
       const restaurantResponse = await fetch(
-        "http://localhost:8080/getRestaurant/"+restaurantId,
+        "http://localhost:8080/getRestaurant/" + restaurantId,
         {
           method: "GET",
           headers: {
@@ -54,9 +61,26 @@ const AdminView = (props) => {
         }
       );
       const restaurantJson = await restaurantResponse.json();
+      // console.log("hi");
       if (restaurantJson.success) {
+        let sections = await fetch(
+          "http://localhost:8080/" + restaurantId + "/getSections",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        sections = await sections.json();
+        // console.log(sections);
+        if (sections.success) {
+          // console.log("sections",sections)
+          restaurantJson.restaurant["sections"] = sections.sections;
+        }
         setRestaurant(restaurantJson.restaurant);
-        console.log("fetched restaurant:"+restaurantJson.restaurant.name);
+        console.log("fetched restaurant:" + restaurantJson.restaurant.name);
+        console.log(restaurantJson.restaurant);
       } else {
         console.log("No Restaurants");
         // setIsLoaded(false)
@@ -66,29 +90,102 @@ const AdminView = (props) => {
     }
   }
 
+  // async function fetchRestaurant(restaurantId) {
+  //   try {
+  //     const restaurantResponse = await fetch(
+  //       "http://localhost:8080/getRestaurant/" + restaurantId,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const restaurantJson = await restaurantResponse.json();
+  //     if (restaurantJson.success) {
+  //       setRestaurant(restaurantJson.restaurant);
+  //       console.log("fetched restaurant:" + restaurantJson.restaurant.name);
+  //     } else {
+  //       console.log("No Restaurants");
+  //       // setIsLoaded(false)
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
       <List>
+        <ListItem key={"Restaurant Details"} disablePadding>
+          {/* <Link to={path} style={{ textDecoration: "none" }}> */}
+          <ListItemButton
+            onClick={() =>
+              setSelectedComponent(<AdminDetails restaurant={restaurant} />)
+            }
+          >
+            <ListItemIcon>
+              {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText
+              primary={"Restaurant Details"}
+              style={{ color: "black" }}
+            />
+          </ListItemButton>
+          {/* </Link> */}
+        </ListItem>
+        <ListItem key={"Restaurant Details1"} disablePadding>
+          <Accordion sx={{width:'100%',}}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Sections</Typography>
+            </AccordionSummary>
+            {
+              restaurant ?
+            <AccordionDetails  >
+              {restaurant.sections.map((section, index) => (
+                <ListItemButton
+                  key={index}
+                  onClick={() => setSelectedComponent(<SectionAdminView />)}
+                >
+                  <ListItemIcon>
+                    {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={section.sectionName}
+                    style={{ color: "black" }}
+                  />
+                </ListItemButton>
+              ))}
+            </AccordionDetails>
+            :
+            <Typography>poonakalu loading</Typography>
+            }
+          </Accordion>
+        </ListItem>
         {[
-          { text: "Restaurant Details", component: <AdminDetails restaurant={restaurant} /> },
-          { text: "Sections", component: <SectionAdminView /> },
           { text: "Statistics", component: <div>Restaurant Stats Here</div> },
           { text: "Bookings", component: <div>All Bookings here</div> },
           { text: "Add Section", component: <div> Adding a section here</div> },
-          { text: "Remove Restaurant", component: <div>Remove section here</div> },
+          {
+            text: "Remove Restaurant",
+            component: <div>Remove section here</div>,
+          },
           { text: "Profile", component: <MyProfile /> },
           { text: "Log Out", component: <div>Logout</div> },
         ].map(({ text, component }, index) => (
           <ListItem key={text} disablePadding>
             {/* <Link to={path} style={{ textDecoration: "none" }}> */}
-              <ListItemButton onClick={() => setSelectedComponent(component)}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} style={{ color: "black" }} />
-              </ListItemButton>
+            <ListItemButton onClick={() => setSelectedComponent(component)}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} style={{ color: "black" }} />
+            </ListItemButton>
             {/* </Link> */}
           </ListItem>
         ))}
@@ -99,9 +196,9 @@ const AdminView = (props) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-    useEffect(()=>{
-      fetchRestaurant(id)
-      },[])
+  useEffect(() => {
+    fetchRestaurant(id);
+  }, []);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -185,11 +282,9 @@ const AdminView = (props) => {
         >
           {drawer}
         </Drawer>
-               
       </Box>
 
       {selectedComponent}
-      
     </Box>
   );
 };
@@ -203,3 +298,5 @@ AdminView.propTypes = {
 };
 
 export default AdminView;
+
+// { text: "Restaurant Details", component: <AdminDetails restaurant={restaurant} /> },
