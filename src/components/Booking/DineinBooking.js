@@ -69,9 +69,10 @@ const DineinBooking = (props) => {
           label="Select Reservation Date"
           value={props.booking.reservationTime}
           onChange={handleReservationTimeChange}
-          renderInput={(params) => (
-            <TextField sx={{ marginTop: "1em" }} {...params} />
-          )}
+          // renderInput={(params) => (
+          //   <TextField sx={{ marginTop: "1em" }} {...params} />
+          // )}
+          // slotProps={{ textField: { variant: 'outlined' } }}
         />
       </LocalizationProvider>
       <Typography variant="h5" marginTop="1em">
