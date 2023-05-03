@@ -297,12 +297,13 @@ const Restaurant = () => {
     try {
       if(booking.userId)
       {
+        console.log(currentSection.autoAcceptBookings);
         let bookingResponse = await fetch("http://localhost:8080/bookDineinSection",{
           method:'POST',
           headers:{
             'Content-Type':'application/json'
           },
-          body: JSON.stringify(booking)
+          body: JSON.stringify({...booking, status:(currentSection.autoAcceptBookings==="No" ? "To be Accepted":"Booked-Open")})
         })
         bookingResponse = await bookingResponse.json()
         console.log(bookingResponse);

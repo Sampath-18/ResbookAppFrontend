@@ -79,8 +79,8 @@ const AdminView = (props) => {
           restaurantJson.restaurant["sections"] = sections.sections;
         }
         setRestaurant(restaurantJson.restaurant);
-        console.log("fetched restaurant:" + restaurantJson.restaurant.name);
-        console.log(restaurantJson.restaurant);
+        // console.log("fetched restaurant:" + restaurantJson.restaurant.name);
+        // console.log(restaurantJson.restaurant);
       } else {
         console.log("No Restaurants");
         // setIsLoaded(false)
@@ -135,7 +135,7 @@ const AdminView = (props) => {
           </ListItemButton>
           {/* </Link> */}
         </ListItem>
-        <ListItem key={"Restaurant Details1"} disablePadding>
+        <ListItem key={"Restaurant Sections"} disablePadding>
           <Accordion sx={{ width: "100%" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -149,7 +149,7 @@ const AdminView = (props) => {
                 {restaurant.sections.map((section, index) => (
                   <ListItemButton
                     key={index}
-                    onClick={() => setSelectedComponent(<SectionAdminView section={section} />)}
+                    onClick={() => setSelectedComponent(<SectionAdminView section={section} restaurant={restaurant} />)}
                   >
                     <ListItemIcon>
                       {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -177,7 +177,7 @@ const AdminView = (props) => {
           { text: "Profile", component: <MyProfile restaurant={restaurant} /> },
           { text: "Log Out", component: <div>Logout</div> },
         ].map(({ text, component }, index) => (
-          <ListItem key={text} disablePadding>
+          <ListItem key={index} disablePadding>
             {/* <Link to={path} style={{ textDecoration: "none" }}> */}
             <ListItemButton onClick={() => setSelectedComponent(component)}>
               <ListItemIcon>
