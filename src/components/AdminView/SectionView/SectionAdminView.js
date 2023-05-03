@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -34,6 +34,12 @@ const SectionAdminView = (props) => {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  useEffect(() => {
+    setSelectedSectionComp(<SectionDetails section={props.section} />)
+  }, [props])
+  // console.log(props);
+
   return (
     <div>
       <Container>
@@ -85,7 +91,7 @@ const SectionAdminView = (props) => {
               },
               {
                 text: <Typography variant="h5">Bookings</Typography>,
-                component: <AdminViewBookings/>,
+                component: <AdminViewBookings sections={[props.section]} restaurant={props.restaurant} />,
               },
               {
                 text: <Typography variant="h5">Stats</Typography>,
@@ -105,7 +111,7 @@ const SectionAdminView = (props) => {
                 component: <div>Logout</div>,
               },
             ].map(({ text, component }, index) => (
-              <ListItem key={text} disablePadding>
+              <ListItem key={index} disablePadding>
                 {/* <Link to={path} style={{ textDecoration: "none" }}> */}
                 <ListItemButton onClick={() => setSelectedSectionComp(component)}>
                 
