@@ -16,7 +16,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AdminDetails from "./AdminDetails";
-import SectionAdminView from "./SectionAdminView";
+import SectionAdminView from "./SectionView/SectionAdminView";
 import MyProfile from "./MyProfile";
 import { useParams } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
