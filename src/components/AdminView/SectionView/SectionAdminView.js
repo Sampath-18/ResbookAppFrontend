@@ -25,6 +25,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import SectionMenu from "./SectionMenu";
 // import SectionBookings from "./SectionBookings";
 
 const SectionAdminView = (props) => {
@@ -99,7 +100,7 @@ const SectionAdminView = (props) => {
               },
               {
                 text: <Typography variant="h5">Menu</Typography>,
-                component: <div> Adding a section here</div>,
+                component: <SectionMenu/>,
               },
               {
                 text: <Typography variant="h5">Ratings</Typography>,
