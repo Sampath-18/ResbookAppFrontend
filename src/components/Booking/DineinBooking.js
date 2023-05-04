@@ -64,7 +64,7 @@ const DineinBooking = (props) => {
       >
         Book your chairs
       </Typography>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimePicker
           label="Select Reservation Date"
           value={props.booking.reservationTime}
@@ -74,7 +74,7 @@ const DineinBooking = (props) => {
           // )}
           // slotProps={{ textField: { variant: 'outlined' } }}
         />
-      </LocalizationProvider>
+      </LocalizationProvider> */}
       <Typography variant="h5" marginTop="1em">
         Guests and details
       </Typography>
