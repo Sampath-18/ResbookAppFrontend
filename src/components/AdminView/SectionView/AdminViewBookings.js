@@ -98,7 +98,7 @@ const AdminViewBookings = (props) => {
       updateStatusResponse = await updateStatusResponse.json();
       if (updateStatusResponse.success) {
         console.log("Updated status successfully");
-        fetchBookings(props.sectionIds); // to update bookings after status has been changed
+        fetchBookings(props.sections.map((section, _) => section._id)); // to update bookings after status has been changed
       }
     } catch (error) {
       console.error(error);
