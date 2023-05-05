@@ -166,7 +166,7 @@ function ProfilePage(props) {
       <Toolbar />
       <Divider />
       <List>
-        {['My Account', 'Completed Dine-in Reservations', 'Upcoming Dine-in Reservations', 'Completed Catering Reservations', 'Upcoming Catering Reservations', 'Saved Restaurants', 'Favourite Restaurants'].map((text, index) => (
+        {['My Account', 'Completed Dine-in Reservations', 'Upcoming Dine-in Reservations', 'Completed Catering Reservations', 'Upcoming Catering Reservations', 'Saved Restaurants', 'Favourite Restaurants','My favourites'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
