@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  AppBar,
-  Toolbar,
-  Button,
   Container,
   Typography,
   Grid,
@@ -10,22 +7,13 @@ import {
 } from "@mui/material";
 import AdminViewBookings from "./AdminViewBookings";
 import List from "@mui/material/List";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import SectionDetails from "./SectionDetails";
 import Switch from "@mui/material/Switch";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import SectionMenu from "./SectionMenu";
+import SectionMenu from "./SectionMenu/SectionMenu";
 // import SectionBookings from "./SectionBookings";
 
 const SectionAdminView = (props) => {
@@ -100,7 +88,7 @@ const SectionAdminView = (props) => {
               },
               {
                 text: <Typography variant="h5">Menu</Typography>,
-                component: <SectionMenu/>,
+                component: <SectionMenu sectionId={props.section._id} />,
               },
               {
                 text: <Typography variant="h5">Ratings</Typography>,

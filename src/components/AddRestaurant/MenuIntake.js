@@ -174,42 +174,6 @@ const MenuIntake = (props) => {
                       </Button>
                     </Paper>
                   </Paper>
-                  {/* <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} >
-                    <Grid item xs={2} sm={4} md={4}>
-                      <TextField id="outlined-basic" label="Item" name="Item" variant="outlined" value={menuItem.Item} onChange={(event) => handleChange(event, categoryIndex, itemIndex) } />
-                    </Grid>
-                    <Grid item xs={2} sm={4} md={4}>
-                      <TextField id="outlined-basic" label="About" name="About" variant="outlined" value={menuItem.About} onChange={(event) => handleChange(event, categoryIndex, itemIndex) } />
-                    </Grid>
-                    {
-                      menuItem.quantities.map((quantity, quantityIndex) => (
-                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} >
-                          <Grid item xs={2} sm={4} md={4}>
-                            <TextField id="outlined-basic" label="quantity" name="quantity" variant="outlined" value={quantity.quantity} onChange={(event) => handleQuantityChange(event, categoryIndex, itemIndex, quantityIndex) } />
-                          </Grid>
-                          <Grid item xs={2} sm={4} md={4}>
-                            <TextField id="outlined-basic" label="Cost" name="cost" variant="outlined" value={quantity.cost} onChange={(event) => handleQuantityChange(event, categoryIndex, itemIndex, quantityIndex) } />
-                          </Grid>
-                          <Grid item xs={2} sm={4} md={4}>
-                            <TextField id="outlined-basic" label="avgPersons" name="avgPersons" variant="outlined" value={quantity.avgPersons} onChange={(event) => handleQuantityChange(event, categoryIndex, itemIndex, quantityIndex) } />
-                          </Grid>
-                          <Grid item xs={2} sm={4} md={4}>
-                            <Button onClick={(event) => handleRemoveQuantity(event, categoryIndex, itemIndex, quantityIndex)}>x</Button>
-                          </Grid> 
-                        </Grid>
-                      ))
-                    }
-                    <Grid item xs={2} sm={4} md={4}>
-                      <Button variant="contained" onClick={() => handleAddQuantity(categoryIndex, itemIndex)} >
-                        Add quantity
-                      </Button>
-                    </Grid>
-                    <Grid item xs={2} sm={4} md={4}>
-                      <Button variant="contained" onClick={() => handleRemoveMenuItem(categoryIndex, itemIndex)} >
-                        Remove Item
-                      </Button>
-                    </Grid>
-                  </Grid> */}
                 </Paper>
               );
             })}
