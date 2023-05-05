@@ -1,4 +1,4 @@
-import { Paper, Button, Grid } from "@mui/material";
+import { Paper, Button, Grid, Typography } from "@mui/material";
 import React from "react";
 
 import TextField from "@mui/material/TextField";
@@ -19,7 +19,6 @@ const AddSection = (props) => {
   };
 
   return (
-    <>
     <Container
         sx={{
           display: "flex",
@@ -192,6 +191,26 @@ const AddSection = (props) => {
                   onChange={(event) => props.onChange(event)}
                 />
               </Grid>
+              <Grid item xs={2} sm={4} md={4}>
+                <Typography sx={{ marginTop: "1em" }}>
+                  Open Time:
+                  <input
+                    style={{ marginLeft: "1em" }}
+                    type="time"
+                    name="OpenTime"
+                    onChange={(event) => props.onChange(event)}
+                  />
+                </Typography>
+                <Typography sx={{ marginTop: "1em" }}>
+                  Close Time:
+                  <input
+                    style={{ marginLeft: "1em" }}
+                    type="time"
+                    name="CloseTime"
+                    onChange={(event) => props.onChange(event)}
+                  />
+                </Typography>
+              </Grid>
             </Grid>
             {/* <Button variant="contained" onClick={() => navigate("/MenuIntake")}>
               Add Menu
@@ -208,7 +227,7 @@ const AddSection = (props) => {
             width: "35%",
           }}
         >
-          <TimingsIntake timing={props.timing} setTimings={(timing) => props.setTimings(timing)} />
+          {/* <TimingsIntake timing={props.timing} setTimings={(timing) => props.setTimings(timing)} /> */}
           <Button
             sx={{ marginTop: "1em" }}
             variant="contained"
@@ -222,7 +241,6 @@ const AddSection = (props) => {
         <PhotoUploader setSecImg={(secImg) => props.setSecImg(secImg)} />
       </Container>
     </Container>
-    </>
   );
 };
 

@@ -150,7 +150,7 @@ const Login = () => {
       if (!responseJson.success) {
         alert("Enter Valid Restaurant credentials");
       } else {
-        alert("Logged in successfully!!!");
+        // alert("Logged in successfully!!!");
         // login(responseJson.user);
         // console.log("Logged in successfully!!!");
         // navigate("/");

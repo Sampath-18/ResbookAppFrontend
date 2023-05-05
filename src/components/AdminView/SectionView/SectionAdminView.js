@@ -4,6 +4,7 @@ import {
   Typography,
   Grid,
   Box,
+  Button,
 } from "@mui/material";
 import AdminViewBookings from "./AdminViewBookings";
 import List from "@mui/material/List";
@@ -14,6 +15,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import SectionDetails from "./SectionDetails";
 import Switch from "@mui/material/Switch";
 import SectionMenu from "./SectionMenu/SectionMenu";
+import { useNavigate } from "react-router-dom";
 // import SectionBookings from "./SectionBookings";
 
 const SectionAdminView = (props) => {
@@ -23,6 +25,35 @@ const SectionAdminView = (props) => {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  // const navigate = useNavigate()
+
+  const deleteSection = async (sectionId,restaurantId) => {
+    try {
+      // setEdit(false);
+      // console.log(eitem);
+      let deleteSectionResponse = await fetch(
+        "http://localhost:8080/deleteSection/" + sectionId,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      deleteSectionResponse = await deleteSectionResponse.json();
+      if (deleteSectionResponse.success) {
+        console.log("Deleted Section Successfully");
+      } else {
+        console.log(deleteSectionResponse.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      console.log("set update restaurant");
+      props.updateRestaurant()
+    }
+  }
 
   useEffect(() => {
     setSelectedSectionComp(<SectionDetails section={props.section} />)
@@ -92,12 +123,15 @@ const SectionAdminView = (props) => {
               },
               {
                 text: <Typography variant="h5">Ratings</Typography>,
-                component: <div>Remove section here</div>,
+                component: <div>Ratings here</div>,
               },
 
               {
                 text: <Typography variant="h5">Remove section</Typography>,
-                component: <div>Logout</div>,
+                component: <Container>
+                  <Typography>Are you sure, Do you want to remove the section? This action is irreversible</Typography>
+                  <Button variant="outlined" sx={{backgroundColor:"red",color:"white"}} onClick={() => deleteSection(props.section._id,props.restaurant._id)}>Delete</Button>
+                </Container>,
               },
             ].map(({ text, component }, index) => (
               <ListItem key={index} disablePadding>

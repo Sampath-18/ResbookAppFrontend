@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Paper, Button } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -87,6 +87,8 @@ const ReviewAddRestaurant = () => {
   //     }
   //   }
   // }
+
+  const navigate=useNavigate()
 
   const addRestaurantToDB = async (event) => {
     console.log(location.state);
@@ -272,6 +274,7 @@ const ReviewAddRestaurant = () => {
           console.log(
             "-----------------------Addition of restaurant to DB successfully completed------------------------"
           );
+          navigate('/')
         } else {
           // notify user that restaurant addition failed
           console.log("Restaurant addition failed");

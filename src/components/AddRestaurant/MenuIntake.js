@@ -144,7 +144,7 @@ const MenuIntake = (props) => {
                   <Paper elevation={0} sx={{display:"flex", flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
                     <Paper elevation={0} sx={{display:"flex", flexDirection:"column", justifyContent:"space-around"}}>
                       <TextField sx={{margin:"1em"}} id="outlined-basic" label="Item" name="itemName" variant="outlined" value={menuItem.itemName} onChange={(event) => handleChange(event, categoryIndex, itemIndex) } />
-                      <TextField sx={{margin:"1em"}} id="outlined-basic" label="About" name="About" variant="outlined" value={menuItem.About} onChange={(event) => handleChange(event, categoryIndex, itemIndex) } />
+                      {/* <TextField sx={{margin:"1em"}} id="outlined-basic" label="About" name="About" variant="outlined" value={menuItem.About} onChange={(event) => handleChange(event, categoryIndex, itemIndex) } /> */}
                       <TextField sx={{margin:"1em"}} id="outlined-basic" label="Type" name="type" variant="outlined" value={menuItem.type} onChange={(event) => handleChange(event, categoryIndex, itemIndex) } />
                     </Paper>
                     <Paper elevation={0} sx={{display:"flex", flexDirection:"column"}}>
