@@ -24,6 +24,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AdminViewBookings from "./SectionView/AdminViewBookings";
+import AddNewSection from "./AddNewSection";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -41,7 +43,7 @@ const AdminView = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [selectedComponent, setSelectedComponent] = React.useState(
-    <Box>No selection</Box>
+    <AdminDetails restaurant={restaurant} />
   );
 
   const handleDrawerToggle = () => {
@@ -117,131 +119,122 @@ const AdminView = (props) => {
     <div>
       <Toolbar />
       <Divider />
-      <List>
-        <ListItem key={"Restaurant Details"} disablePadding>
-          {/* <Link to={path} style={{ textDecoration: "none" }}> */}
-          <ListItemButton
-            onClick={() =>
-              setSelectedComponent(<AdminDetails restaurant={restaurant} />)
-            }
-          >
-            <ListItemIcon>
-              {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText
-              primary={"Restaurant Details"}
-              style={{ color: "black" }}
-            />
-          </ListItemButton>
-          {/* </Link> */}
-        </ListItem>
-        <ListItem key={"Restaurant Sections"} disablePadding>
-          <Accordion sx={{ width: "100%" }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Sections</Typography>
-            </AccordionSummary>
-            {restaurant ? (
-              <AccordionDetails>
-                {restaurant.sections.map((section, index) => (
-                  <ListItemButton
-                    key={index}
-                    onClick={() => setSelectedComponent(<SectionAdminView section={section} restaurant={restaurant} />)}
-                  >
-                    <ListItemIcon>
-                      {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={section.sectionName}
-                      style={{ color: "black" }}
-                    />
-                  </ListItemButton>
-                ))}
-              </AccordionDetails>
-            ) : (
-              <Typography>poonakalu loading</Typography>
-            )}
-          </Accordion>
-        </ListItem>
-        {[
-          { text: "Statistics", component: <div>Restaurant Stats Here</div> },
-          { text: "Bookings", component: <div>All Bookings here</div> },
-          { text: "Add Section", component: <div> Adding a section here</div> },
-          {
-            text: "Remove Restaurant",
-            component: <div>Remove section here</div>,
-          },
-          { text: "Profile", component: <MyProfile restaurant={restaurant} /> },
-          { text: "Log Out", component: <div>Logout</div> },
-        ].map(({ text, component }, index) => (
-          <ListItem key={index} disablePadding>
+      {restaurant ? (
+        <List>
+          <ListItem key={"Restaurant Details"} disablePadding>
             {/* <Link to={path} style={{ textDecoration: "none" }}> */}
-            <ListItemButton onClick={() => setSelectedComponent(component)}>
+            <ListItemButton
+              onClick={() =>
+                setSelectedComponent(<AdminDetails restaurant={restaurant} />)
+              }
+            >
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} style={{ color: "black" }} />
+              <ListItemText
+                primary={"Restaurant Details"}
+                style={{ color: "black" }}
+              />
             </ListItemButton>
             {/* </Link> */}
           </ListItem>
-        ))}
-      </List>
+          <ListItem key={"Restaurant Sections"} disablePadding>
+            <Accordion sx={{ width: "100%" }}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Sections</Typography>
+              </AccordionSummary>
+              {restaurant ? (
+                <AccordionDetails>
+                  {restaurant.sections.map((section, index) => (
+                    <ListItemButton
+                      key={index}
+                      onClick={() =>
+                        setSelectedComponent(
+                          <SectionAdminView
+                            section={section}
+                            restaurant={restaurant}
+                            updateRestaurant={() => setUpdateRestaurant(!updateRestaurant)}
+                          />
+                        )
+                      }
+                    >
+                      <ListItemIcon>
+                        {1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={section.sectionName}
+                        style={{ color: "black" }}
+                      />
+                    </ListItemButton>
+                  ))}
+                </AccordionDetails>
+              ) : (
+                <Typography>poonakalu loading</Typography>
+              )}
+            </Accordion>
+          </ListItem>
+          {[
+            { text: "Statistics", component: <div>Restaurant Stats Here</div> },
+            {
+              text: "Bookings",
+              component: (
+                <AdminViewBookings
+                  restaurant={restaurant}
+                  sections={restaurant.sections}
+                />
+              ),
+            },
+            {
+              text: "Add Section",
+              component: <AddNewSection updateRestaurant={() => setUpdateRestaurant(!updateRestaurant)} restaurantId={restaurant._id} />,
+            },
+            {
+              text: "Remove Restaurant",
+              component: <div>Remove section here</div>,
+            },
+            {
+              text: "Profile",
+              component: <MyProfile restaurant={restaurant} />,
+            },
+            { text: "Log Out", component: <div>Logout</div> },
+          ].map(({ text, component }, index) => (
+            <ListItem key={index} disablePadding>
+              {/* <Link to={path} style={{ textDecoration: "none" }}> */}
+              <ListItemButton onClick={() => setSelectedComponent(component)}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} style={{ color: "black" }} />
+              </ListItemButton>
+              {/* </Link> */}
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Typography variant="h5">Fetching Restaurant</Typography>
+      )}
     </div>
   );
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
+  const [updateRestaurant,setUpdateRestaurant] = useState(false);// variable to set whenever we want restaurant to to be reloaded may be due to updates
+    
   useEffect(() => {
     fetchRestaurant(id);
-  }, []);
+    setSelectedComponent(<AdminDetails restaurant={restaurant} />)
+  }, [updateRestaurant]);
+
+
   return (
+    restaurant ?
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      {/* <AppBar
-        position="absolute"
-        //       ''
-        // | 'fixed'
-        // | 'relative'
-        // | 'static'
-        // | 'sticky'
-
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          marginTop: "4.3em",
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <Typography variant="h5" noWrap component="div">
-                Admin View
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <AccountCircleRoundedIcon fontSize="large" />
-            </Grid>
-
-            <Grid item xs={4}>
-              <EditIcon fontSize="large" />
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar> */}
 
       {/* Box for drawer */}
       <Box
@@ -285,6 +278,8 @@ const AdminView = (props) => {
 
       {selectedComponent}
     </Box>
+    :
+    <Typography>Loading Restaurant</Typography>
   );
 };
 

@@ -1,18 +1,16 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { Container, Rating } from "@mui/material";
+import { Rating } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
 const drawerWidth = 240;
 
 function AdminDetails(props) {
-  // const [restaurant, setRestaurant] = React.useState(props.restaurant);
+  const [restaurant, setRestaurant] = React.useState(props.restaurant);
 
   // async function fetchRestaurant(restaurantId) {
   //   try {
@@ -42,13 +40,12 @@ function AdminDetails(props) {
     
   }
 
-  // React.useEffect(() => {
-  //   // let rId = props.restaurantId;
-  //   fetchRestaurant(props.restaurantId)
-  // }, [props]);
+  React.useEffect(() => {
+    setRestaurant(props.restaurant)
+  }, [props]);
 
   return (
-    props.restaurant == null ?
+    restaurant === null ?
     <div>Restaurant Loading.....</div>
     :
     <Box
@@ -71,7 +68,7 @@ function AdminDetails(props) {
         <Grid container spacing={3}>
           <Grid item xs={5}>
             <Typography variant="h5" noWrap component="div" color="white">
-              {props.restaurant.name}
+              {restaurant.name}
             </Typography>
           </Grid>
 
@@ -79,7 +76,7 @@ function AdminDetails(props) {
             <FormControlLabel
               control={
                 <Switch
-                  checked={props.restaurant.currentStatus==="Open"}
+                  checked={restaurant.currentStatus==="Open"}
                   // onChange={() => {
                   //   setIsRestaurantLogin(!isRestaurantLogin);
                   // }}
@@ -117,8 +114,8 @@ function AdminDetails(props) {
 
       <img
         style={{ width: "90%", height: "400px", marginTop: "1em", }}
-        src={props.restaurant.coverImage.url}
-        alt={props.restaurant.coverImage.public_id}
+        src={restaurant.coverImage.url}
+        alt={restaurant.coverImage.public_id}
       ></img>
 
       <Box
@@ -143,7 +140,7 @@ function AdminDetails(props) {
             Avg cost per person :
           </Typography>
           <Typography variant="h5" noWrap component="div" color="white">
-            {props.restaurant.avgCost}
+            {restaurant.avgCost}
           </Typography>
         </Box>
 
@@ -171,7 +168,7 @@ function AdminDetails(props) {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={props.restaurant.parkingAvailable === "Yes"}
+                    checked={restaurant.parkingAvailable === "Yes"}
                     // onChange={() => {
                     //   setIsRestaurantLogin(!isRestaurantLogin);
                     // }}
@@ -195,7 +192,7 @@ function AdminDetails(props) {
         }}
       >
         <Typography>
-          Restaurant Ratings : <Rating name="size-large" value={props.restaurant.rating.toFixed(2)} />
+          Restaurant Ratings : <Rating name="size-large" value={restaurant.rating.toFixed(2)} />
         </Typography>
       </Box>
     </Box>
