@@ -10,42 +10,43 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 export default function RestaurantTile(props) {
-  const restaurant = props.restaurant
-  const userlikings = props.userlikings
+  // const restaurant = props.restaurant
+  // const userlikings = props.userlikings
 
   // console.log(userlikings ? userlikings.savedRestaurants : "no user");
   const [isRestaurantSaved, setIsRestaurantSaved] = React.useState(false)//userlikings ? (userlikings.savedRestaurants.findIndex(restaurant => restaurant.equals(restaurant._id))!==-1) : false)
   const [isRestaurantFavorited, setIsRestaurantfavorited] = React.useState(false)//userlikings ? userlikings.favRestaurants.findIndex(restaurant => restaurant.equals(restaurant._id))!==-1 : false)
 
   React.useEffect(() => {
-    if(userlikings)
+    if(props.userlikings)
     {
-      console.log("called",userlikings.savedRestaurants.findIndex(restaurantId => restaurantId===restaurant._id));
-      setIsRestaurantSaved(userlikings ? (userlikings.savedRestaurants.findIndex(restaurantId => restaurantId===restaurant._id)!==-1) : false)
-      setIsRestaurantfavorited(userlikings ? (userlikings.favRestaurants.findIndex(restaurantId => restaurantId===restaurant._id)!==-1) : false)
+      console.log("props.userlikings updated")
+      setIsRestaurantSaved(props.userlikings ? (props.userlikings.savedRestaurants.findIndex(restaurantId => restaurantId===props.restaurant._id)!==-1) : false)
+      setIsRestaurantfavorited(props.userlikings ? (props.userlikings.favRestaurants.findIndex(restaurantId => restaurantId===props.restaurant._id)!==-1) : false)
     }
-  }, [props.userlikings])
+  }, [props])
   
   const onSaveRestaurant = async () => {
-    if(!userlikings)
+    if(!props.userlikings)
     {
       alert("Login to save!!!")
       return
     }
-    const operation = isRestaurantSaved ? "remove":"add"
+    const operation = isRestaurantSaved ? "$pull":"$push"
     try {
-      let response = await fetch("http://localhost:8080/updateUserLikings/"+userlikings.userId,{
+      let response = await fetch("http://localhost:8080/updateUserLikings/"+props.userlikings.userId,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"
         },
-        body:JSON.stringify({operation:operation,favType:"savedRestaurants",idToOperateOn:restaurant._id})
+        body:JSON.stringify({operation:operation,favType:"savedRestaurants",id:props.restaurant._id})
       })
       response = await response.json()
       if(response.success)
       {
-        console.log("Saved restaurant",restaurant._id);
-        setIsRestaurantSaved(!isRestaurantSaved)
+        console.log("Saved restaurant",props.restaurant._id);
+        props.updateUserlikings(response.userlikings)
+        // setIsRestaurantSaved(!isRestaurantSaved)
       }
       else
       {
@@ -57,25 +58,26 @@ export default function RestaurantTile(props) {
   }
 
   const onFavoriteRestaurant = async () => {
-    if(!userlikings)
+    if(!props.userlikings)
     {
       alert("Login to favorite!!!")
       return
     }
-    const operation = isRestaurantFavorited ? "remove":"add"
+    const operation = isRestaurantFavorited ? "$pull":"$push"
     try {
-      let response = await fetch("http://localhost:8080/updateUserLikings/"+userlikings.userId,{
+      let response = await fetch("http://localhost:8080/updateUserLikings/"+props.userlikings.userId,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"
         },
-        body:JSON.stringify({operation:operation,favType:"favRestaurants",idToOperateOn:restaurant._id})
+        body:JSON.stringify({operation:operation,favType:"favRestaurants",id:props.restaurant._id})
       })
       response = await response.json()
       if(response.success)
       {
-        console.log("favorited restaurant",restaurant._id);
-        setIsRestaurantfavorited(!isRestaurantFavorited)
+        console.log("favorited restaurant",props.restaurant._id);
+        props.updateUserlikings(response.userlikings)
+        // setIsRestaurantfavorited(!isRestaurantFavorited)
       }
       else
       {
@@ -92,22 +94,22 @@ export default function RestaurantTile(props) {
         <CardMedia
           component="img"
           height="140"
-          image={restaurant.img}
-          alt={restaurant.name+" + "+restaurant._id}
+          image={props.restaurant.img}
+          alt={props.restaurant.name+" + "+props.restaurant._id}
         />
         <Button variant="contained" sx={{color:"white",position:"absolute",top:7.5,right:7.5, minWidth:'30px', maxWidth:'40px'}}>
-          {restaurant.rating.toFixed(1)}
+          {props.restaurant.rating.toFixed(1)}
         </Button>
         
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {restaurant.name}
+            {props.restaurant.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Approx {restaurant.avgCost} for 2 people
+            Approx {props.restaurant.avgCost} for 2 people
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {restaurant.city}
+            {props.restaurant.city}
           </Typography>
         </CardContent>
       </CardActionArea>

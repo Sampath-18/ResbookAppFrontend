@@ -5,6 +5,9 @@ import React, { useContext, useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import ReviewIntake from "./ReviewIntake";
+import dayjs from "dayjs";
+import "dayjs/locale/en"; // import the English locale for month names
 
 const Reviews = (props) => {
   // const reviews = [
@@ -39,7 +42,8 @@ const Reviews = (props) => {
       alert("Login to give review!!!")
       return
     }
-    navigate("/ReviewIntake",{state:{userId:user._id, sectionId:props.sectionId, restaurantId:props.restaurantId}})
+    props.setSelectedBackdropComponent(<ReviewIntake userId={user._id} sectionId={props.sectionId} restaurantId={props.restaurantId} setSelectedBackdropComponent={props.setSelectedBackdropComponent} /> )
+    // navigate("/ReviewIntake",{state:{userId:user._id, sectionId:props.sectionId, restaurantId:props.restaurantId}})
   }
   const [reviews, setReviews] = useState([]);
   // console.log("props",props);
@@ -76,7 +80,7 @@ const Reviews = (props) => {
   useEffect(() => {
     const fetchReviews = async() => {
       // console.log("props",props);
-      console.log("fetch reviews called")
+      console.log("fetch reviews called",props.reviews)
       try {
         const last = Math.min(props.reviews.length,3+reviews.length)
         let newReviews = []
@@ -264,7 +268,7 @@ const Reviews = (props) => {
                     alignSelf: "center",
                   }}
                 >
-                  Posted on {review.date}
+                  Posted on {dayjs(review.date).locale("en").format('h:mm A, D MMMM, YYYY')}
                 </span>
               </Typography>
               <Typography variant="body2">{review.review}</Typography>

@@ -31,7 +31,7 @@ import MyProfile from "./components/AdminView/MyProfile";
 import AdminView from "./components/AdminView/AdminView";
 // import { DataContext } from "./components/contexts/UserContext";
 import FavCuisineSelection from "./components/CustomerModule/FavCuisineSelection";
-import MenuItem from "./components/Menu/MenuItem";
+// import MenuItem from "./components/Menu/MenuItem";
 
 
 function App(props) {
@@ -73,7 +73,7 @@ function App(props) {
         {/* admin */}
         <Route exact path='/RestaurantAdminView/:id' element={<AdminView/>}/>
         <Route exact path='/profile' element={<MyProfile/>}/>
-        <Route exact path='/MenuItem' element={<MenuItem/>}/>
+        {/* <Route exact path='/MenuItem' element={<MenuItem/>}/> */}
         </Routes>
       </div>
   );

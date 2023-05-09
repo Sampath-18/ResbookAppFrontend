@@ -19,12 +19,33 @@ import { useNavigate } from "react-router-dom";
 // import SectionBookings from "./SectionBookings";
 
 const SectionAdminView = (props) => {
-  const [age, setAge] = React.useState("");
   const [selectedSectionComp,setSelectedSectionComp]= useState(<Box>No Selection</Box>)
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const updateSectionStatus = async(event) => {
+    try {
+      // console.log(event.target.checked);
+      const status= event.target.checked ? 'Open':'Close'
+      let sectionResponse = await fetch(
+        "http://localhost:8080/updateSectionDetails/" + props.section._id,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({currentStatus:status}),
+        }
+      );
+      sectionResponse = await sectionResponse.json();
+      if (sectionResponse.success) {
+        console.log("Updated Section status Successfully");
+        props.updateRestaurant()
+      } else {
+        console.log(sectionResponse.message);
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   // const navigate = useNavigate()
 
@@ -44,14 +65,15 @@ const SectionAdminView = (props) => {
       deleteSectionResponse = await deleteSectionResponse.json();
       if (deleteSectionResponse.success) {
         console.log("Deleted Section Successfully");
+        // console.log("set update restaurant");
+        props.updateRestaurant()
       } else {
         console.log(deleteSectionResponse.message);
       }
     } catch (error) {
       console.error(error);
     } finally {
-      console.log("set update restaurant");
-      props.updateRestaurant()
+      
     }
   }
 
@@ -83,10 +105,8 @@ const SectionAdminView = (props) => {
               <FormControlLabel
                 control={
                   <Switch
-                  // checked={props.restaurant.currentStatus==="Open"}
-                  // onChange={() => {
-                  //   setIsRestaurantLogin(!isRestaurantLogin);
-                  // }}
+                  checked={props.section.currentStatus==="Open"}
+                  onChange={updateSectionStatus}
                   />
                 }
                 label="Open(Section Status)"
