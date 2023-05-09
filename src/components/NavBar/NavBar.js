@@ -60,7 +60,7 @@ const Search = styled('div')(({ theme }) => ({
   }));
 
 const pages = {'Home':'/', 'Book a Table':'/', 'Blog':'/Blogs'};
-const settings = {'Profile':'/ProfilePage', 'Account':'/ProfilePage', 'Dashboard':'/', 'Logout':'/'};
+const settings = {'Profile':'/ProfilePage', 'Dashboard':'/', 'Logout':'/'};
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
