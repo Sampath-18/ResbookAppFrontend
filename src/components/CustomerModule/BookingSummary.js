@@ -1,13 +1,12 @@
-import { Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
 import { useLocation } from "react-router-dom";
 
 const BookingSummary = () => {
-  const location = useLocation()
-  const bookingSummary = location.state
-  const isJustBooked = bookingSummary.justBooked
-
+  const location = useLocation();
+  const bookingSummary = location.state;
+  const isJustBooked = bookingSummary.justBooked;
 
   // const bookingSummary = {
   //   restaurantName: "Out of the box Courtyard",
@@ -26,35 +25,66 @@ const BookingSummary = () => {
   // };
   return (
     <Container>
-      {
-        isJustBooked
-        ?
-        <Typography variant="h3" sx={{color:"green"}}>Booking Successful!!</Typography>
-        :
+      {isJustBooked ? (
+        <Typography variant="h3" sx={{ color: "green" }}>
+          Booking Successful!!
+        </Typography>
+      ) : (
         <></>
-      }
+      )}
       <Typography variant="h4" sx={{ fontWeight: "bold" }}>
         Booking Summary
       </Typography>
-      <Paper elevation={3} sx={{marginTop:'1em'}}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>{bookingSummary.restaurantName}</Typography>
+      <Paper elevation={3} sx={{ marginTop: "1em" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+          {bookingSummary.restaurantName}
+        </Typography>
         <Typography variant="h6">{bookingSummary.city}</Typography>
       </Paper>
-      <Paper elevation={3} sx={{marginTop:'1em'}}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>Guests:</Typography>
-        {
-            bookingSummary.booking.guests.map((guest,i) => <Typography variant="h6" key={i}>{guest.guestName}({guest.phone})</Typography>)
-        }
+      <Paper elevation={3} sx={{ marginTop: "1em" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+          Guests:
+        </Typography>
+        {bookingSummary.booking.guests.map((guest, i) => (
+          <Typography variant="h6" key={i}>
+            {guest.guestName}({guest.phone})
+          </Typography>
+        ))}
       </Paper>
-      <Paper elevation={3} sx={{marginTop:'1em'}}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>Summary:</Typography>
-        <Typography variant="h6">Section Booked:{bookingSummary.sectionName}</Typography>
-        <Typography variant="h6">Booking Time:{bookingSummary.booking.bookingTime}</Typography>
-        <Typography variant="h6">Status:{bookingSummary.booking.status}</Typography>
-        <Typography variant="h6">Reservation Time:{bookingSummary.booking.reservationTime}</Typography>
+      <Paper elevation={3} sx={{ marginTop: "1em" }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+          Summary:
+        </Typography>
+        <Typography variant="h6">
+          Section Booked:{bookingSummary.sectionName}
+        </Typography>
+        <Typography variant="h6">
+          Booking Time:{bookingSummary.booking.bookingTime}
+        </Typography>
+        <Typography variant="h6">
+          Status:{bookingSummary.booking.status}
+        </Typography>
+        <Typography variant="h6">
+          Reservation Time:{bookingSummary.booking.reservationTime}
+        </Typography>
         <Typography variant="h6">ID:{bookingSummary.booking._id}</Typography>
-        <Typography variant="h6">Guests:{bookingSummary.booking.guests.length}</Typography>
+        <Typography variant="h6">
+          Guests:{bookingSummary.booking.guests.length}
+        </Typography>
       </Paper>
+      <Button
+        sx={{
+          backgroundColor: "#f56042",
+          color: "white",
+          margin: "1em",
+          "&:hover": {
+            backgroundColor: "#a86c60",
+            color: "white",
+          },
+        }}
+      >
+        {isJustBooked ? "OK" : "Back"}
+      </Button>
     </Container>
   );
 };

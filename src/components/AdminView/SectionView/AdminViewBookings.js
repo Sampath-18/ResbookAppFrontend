@@ -84,7 +84,7 @@ const AdminViewBookings = (props) => {
     try {
       console.log("called update");
       let updateStatusResponse = await fetch(
-        "http://localhost:8080/updateDineinBookingStatus/" + bookingId,
+        "http://localhost:8080/updateDineinBooking/" + bookingId,
         {
           method: "POST",
           headers: {
@@ -198,7 +198,7 @@ const AdminViewBookings = (props) => {
                     <Typography sx={{ textAlign: "left", marginTop: "1em" }}>
                       {dayjs(booking.reservationTime)
                         .locale("en")
-                        .format("D MMMM, YYYY")}
+                        .format('h:mm A, D MMMM YYYY')}
                     </Typography>
                     <Paper
                       elevation={0}

@@ -194,11 +194,11 @@ const AdminView = (props) => {
             },
             {
               text: "Remove Restaurant",
-              component: <div>Remove section here</div>,
+              component: <div>Remove Restaurant here</div>,
             },
             {
               text: "Profile",
-              component: <MyProfile restaurant={restaurant} />,
+              component: <MyProfile restaurant={restaurant} setAdminDetails={(admin)=>setRestaurant({...restaurant,admin:admin})} />,
             },
             { text: "Log Out", component: <div>Logout</div> },
           ].map(({ text, component }, index) => (

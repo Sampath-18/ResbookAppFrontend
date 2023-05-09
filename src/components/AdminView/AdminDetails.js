@@ -36,8 +36,30 @@ function AdminDetails(props) {
   //   }
   // }
 
-  const updateRestaurant = async(event) => {
-    
+  const updateRestaurantStatus = async(event) => {
+    try {
+      // console.log(event.target.checked);
+      const status= event.target.checked ? 'Open':'Close'
+      let restaurantResponse = await fetch(
+        "http://localhost:8080/updateRestaurantDetails/" + restaurant._id,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({currentStatus:status}),
+        }
+      );
+      restaurantResponse = await restaurantResponse.json();
+      if (restaurantResponse.success) {
+        console.log("Updated Restaurant status Successfully");
+        setRestaurant({...restaurant,currentStatus:status})
+      } else {
+        console.log(restaurantResponse.message);
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   React.useEffect(() => {
@@ -77,9 +99,7 @@ function AdminDetails(props) {
               control={
                 <Switch
                   checked={restaurant.currentStatus==="Open"}
-                  // onChange={() => {
-                  //   setIsRestaurantLogin(!isRestaurantLogin);
-                  // }}
+                  onChange={updateRestaurantStatus}
                 />
               }
               label="Open(Restaurant Status)"

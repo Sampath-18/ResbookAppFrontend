@@ -2,18 +2,19 @@ import { Button, Paper, Rating, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const ReviewIntake = () => {
+const ReviewIntake = (props) => {
   const [review, setReview] = useState({ rating: 0, restaurantRating: 0, review: "" });
 
-  const location = useLocation()
+  // const location = useLocation()
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const addReviewToDB = async() => {
     try {
-      const userId = location.state.userId
-      const sectionId = location.state.sectionId 
-      const restaurantId = location.state.restaurantId
+      const userId = props.userId
+      const sectionId = props.sectionId 
+      const restaurantId = props.restaurantId
+      console.log(review);
       let reviewResponse = await fetch("http://localhost:8080/addReview",{
         method:"POST",
         headers: {
@@ -22,15 +23,17 @@ const ReviewIntake = () => {
         body:JSON.stringify({...review,userId:userId,sectionId:sectionId})
       })
       reviewResponse = await reviewResponse.json()
+      console.log(reviewResponse);
       if(reviewResponse.success)
       {
-        navigate("/Restaurants/"+restaurantId)
+        props.setSelectedBackdropComponent(null)
+        // navigate("/Restaurants/"+restaurantId)
         // alert("review recorded!!!")
         console.log(reviewResponse.review)
       }
       else
       {
-        // alert("review recording failed!!")
+        alert("Enter all the details correctly!")
       }
     } catch (error) {
       console.error(error);
@@ -38,7 +41,7 @@ const ReviewIntake = () => {
   }
 
   return (
-    <Paper elevation={3} sx={{padding:"1em"}}>
+    <Paper elevation={0} sx={{padding:"1em"}}>
       <Typography variant="h4" sx={{}}>
         Rate you experience
       </Typography>

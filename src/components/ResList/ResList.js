@@ -3,11 +3,11 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container } from "@mui/system";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { UserContext } from "../contexts/UserContext";
 
-const ResList = () => {
+const ResList = (props) => {
 
 
     // let restaurants = [
@@ -83,12 +83,25 @@ const ResList = () => {
     const { user, login, logout } = React.useContext(UserContext);
     async function fetchRestaurants() {
         try {
-            const restaurantsResponse = await fetch("http://localhost:8080/getRestaurants",{
-                method:'GET',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-            })
+            let restaurantsResponse=null
+            if(props.restaurantIds)
+            {
+                console.log("fetching restaurants into list using ids provided:",props.restaurantIds);
+                restaurantsResponse = await fetch("http://localhost:8080/getRestaurantWithIds",{
+                    method:'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({restaurantIds:props.restaurantIds})
+                })
+            }
+            else
+                restaurantsResponse = await fetch("http://localhost:8080/getRestaurants",{
+                    method:'GET',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                })
             const restaurantsJson = await restaurantsResponse.json()
             // console.log(restaurantsJson);
             if(restaurantsJson.success)
@@ -116,8 +129,11 @@ const ResList = () => {
         }
     }
     React.useEffect(() => {
+        console.log("props updated");
         fetchRestaurants()
-    },[])
+        console.log("Restauants fetched again!!");
+    },[props])
+
     React.useEffect(() => {
         async function fetchUserLikings() {
             // console.log("called");
@@ -126,6 +142,7 @@ const ResList = () => {
                 console.log("Couldn't fetch user likings because user hasn't logged in!!");
                 return
             }
+            console.log("fetched likings reslist");
             try {
                 let userlikings = await fetch("http://localhost:8080/getUserLikings/"+user._id,{
                     method:"GET",
@@ -150,7 +167,16 @@ const ResList = () => {
         fetchUserLikings()
     }, [user])
        
-
+    React.useEffect(() => {// update userlikings in the previous page/ parent component
+        
+      if(props.updateProps)
+      {
+        console.log("updating userlikings in parent");
+        props.updateProps(userlikings)
+      }
+        
+    }, [userlikings])
+    
 
     const navigate = useNavigate();
 
@@ -168,7 +194,7 @@ const ResList = () => {
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} >
                     {restaurants.map((restaurant) => (
                         <Grid xs={2} sm={4} md={4} key={restaurant.id}>
-                            <RestaurantTile onClick = {() => onRestaurantClick(restaurant)} restaurant={restaurant} userlikings={userlikings} />
+                            <RestaurantTile onClick = {() => onRestaurantClick(restaurant)} restaurant={restaurant} userlikings={userlikings} updateUserlikings={(userlikings)=>setUserLikings(userlikings)} />
                         </Grid>
                     ))}
                 </Grid>

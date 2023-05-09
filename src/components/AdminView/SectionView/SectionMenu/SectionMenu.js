@@ -88,29 +88,31 @@ const SectionMenu = (props) => {
     setBackdropComponent(null);
   };
 
-  useEffect(() => {
-    async function fetchMenu(sectionId) {
-      try {
-        let menuResponse = await fetch(
-          "http://localhost:8080/" + sectionId + "/getWholeSectionMenu/",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        menuResponse = await menuResponse.json();
-        if (menuResponse.success) {
-          setMenu(menuResponse.menu);
-          console.log("Menu fetched successfully");
-        } else {
-          console.log("Fetch Menu Failed");
+  async function fetchMenu(sectionId) {
+    try {
+      let menuResponse = await fetch(
+        "http://localhost:8080/" + sectionId + "/getWholeSectionMenu/",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      } catch (error) {
-        console.error(error);
+      );
+      menuResponse = await menuResponse.json();
+      if (menuResponse.success) {
+        setMenu(menuResponse.menu);
+        console.log("Menu fetched successfully");
+      } else {
+        console.log("Fetch Menu Failed");
       }
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  useEffect(() => {
+    
     fetchMenu(props.sectionId);
   }, [props, backdropComponent]);
 
@@ -147,14 +149,15 @@ const SectionMenu = (props) => {
       deleteResponse = await deleteResponse.json();
       if (deleteResponse.success) {
         console.log("Successfully deleted menu category");
+        await fetchMenu(props.sectionId)
       } else {
         console.log(
-          "Menu categorydeletion failed with message:" + deleteResponse.message
+          "Menu category deletion failed with message:" + deleteResponse.message
         );
       }
     } catch (error) {
       console.error(error);
-    }
+    } 
   };
 
   const handleCategoryNameChange = async (menuCategoryId,categoryName) => {
