@@ -95,6 +95,32 @@ const MenuItemDetailed = (props) => {
     setEitem({ ...eitem, [event.target.name]: event.target.value });
   };
 
+  const onRemoveClick = async () => {
+    try {
+      // setEdit(false);
+      // console.log(eitem);
+      let itemResponse = await fetch(
+        "http://localhost:8080/deleteMenuItem/" + item._id,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      itemResponse = await itemResponse.json();
+      if (itemResponse.success) {
+        console.log("Deleted Menu Item Successfully");
+      } else {
+        console.log(itemResponse.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      props.setBackdropComponent(null);
+    }
+  };
+
   return (
     <div>
       <Container sx={{ display: "flex", gap: "3em", alignItems: "center" }}>
@@ -172,12 +198,26 @@ const MenuItemDetailed = (props) => {
                   </Button>
                 </Container>
               ) : (
-                <IconButton
-                  sx={{ marginLeft: "1em" }}
-                  onClick={() => onEditClick()}
-                >
-                  <EditIcon fontSize="large"></EditIcon>
-                </IconButton>
+                <>
+                  <IconButton
+                    sx={{ marginLeft: "1em" }}
+                    onClick={() => onEditClick()}
+                  >
+                    <EditIcon fontSize="large"></EditIcon>
+                  </IconButton>
+                  <Button
+                    variant="contained"
+                    style={{
+                      backgroundColor: "red",
+                      color: "white",
+                      marginLeft: "1em",
+                      height:"50%"
+                    }}
+                    onClick={() => onRemoveClick()}
+                  >
+                    Delete
+                  </Button>
+                </>
               )}
             </Paper>
 
@@ -282,7 +322,7 @@ const MenuItemDetailed = (props) => {
                 </Paper>
               </Paper>
             ) : (
-              <TableContainer component={Paper}>
+              <TableContainer sx={{marginTop:'1em'}} component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>

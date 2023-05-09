@@ -261,7 +261,7 @@ const AdminViewBookings = (props) => {
                           <Typography>Accept</Typography>
                         </Button>
                       ) : (
-                        <></>
+                        null
                       )}
                       {booking.status === "To Be Accepted" ||
                       booking.status === "Booked-Open" ? (
@@ -275,11 +275,11 @@ const AdminViewBookings = (props) => {
                           <Typography>Deny</Typography>
                         </Button>
                       ) : (
-                        <></>
+                        null
                       )}
                     </Stack>
                   ) : (
-                    <></>
+                    null
                   )}
                   <IconButton
                     onClick={() =>

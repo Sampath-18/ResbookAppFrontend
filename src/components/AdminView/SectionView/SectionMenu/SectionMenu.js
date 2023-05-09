@@ -9,8 +9,10 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  TextField,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
+import EditIcon from "@mui/icons-material/Edit";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -81,6 +83,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 const SectionMenu = (props) => {
   const [backdropComponent, setBackdropComponent] = React.useState(null);
   const [menu, setMenu] = useState(null);
+  const [edit,setEdit] = useState(null);
   const handleClose = () => {
     setBackdropComponent(null);
   };
@@ -112,7 +115,12 @@ const SectionMenu = (props) => {
   }, [props, backdropComponent]);
 
   const handleMenuItemClick = (item) => {
-    setBackdropComponent(<MenuItemDetailed item={item} />);
+    setBackdropComponent(
+      <MenuItemDetailed
+        item={item}
+        setBackdropComponent={setBackdropComponent}
+      />
+    );
   };
 
   const handleAddItemClick = (menuCategoryId) => {
@@ -125,10 +133,10 @@ const SectionMenu = (props) => {
     );
   };
 
-  const handleRemoveMenuCategoryClick = async(menuCategoryId) => {
+  const handleRemoveMenuCategoryClick = async (menuCategoryId) => {
     try {
       let deleteResponse = await fetch(
-        "http://localhost:8080/deleteMenuCategory/"+menuCategoryId,
+        "http://localhost:8080/deleteMenuCategory/" + menuCategoryId,
         {
           method: "GET",
           headers: {
@@ -137,16 +145,42 @@ const SectionMenu = (props) => {
         }
       );
       deleteResponse = await deleteResponse.json();
-      if(deleteResponse.success)
-      {
+      if (deleteResponse.success) {
         console.log("Successfully deleted menu category");
-      }
-      else
-      {
-        console.log("Menu categorydeletion failed with message:"+deleteResponse.message);
+      } else {
+        console.log(
+          "Menu categorydeletion failed with message:" + deleteResponse.message
+        );
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
+    }
+  };
+
+  const handleCategoryNameChange = async (menuCategoryId,categoryName) => {
+    try {
+      setEdit(false);
+      // console.log(eitem);
+      let itemResponse = await fetch(
+        "http://localhost:8080/updateMenuCategory/" + menuCategoryId,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({categoryName:categoryName}),
+        }
+      );
+      itemResponse = await itemResponse.json();
+      if (itemResponse.success) {
+        console.log("Updated Menu Category Successfully");
+      } else {
+        console.log(itemResponse.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      // setEitem(null);
     }
   }
 
@@ -195,93 +229,138 @@ const SectionMenu = (props) => {
             justifyContent: "flex-start",
           }}
         >
-          <Button variant="contained" style={{ backgroundColor: "pink",color:"black",marginTop:'1em' }} onClick={() => {setBackdropComponent(<AddMenuCategory sectionId={[props.sectionId]} setBackdropComponent={setBackdropComponent} /> )}}>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "pink",
+              color: "black",
+              marginTop: "1em",
+              marginRight: "0",
+            }}
+            onClick={() => {
+              setBackdropComponent(
+                <AddMenuCategory
+                  sectionId={[props.sectionId]}
+                  setBackdropComponent={setBackdropComponent}
+                />
+              );
+            }}
+          >
             Add Menu Category
           </Button>
           {menu
             ? menu.map((menuCategory, categoryIndex) => (
                 <Container key={categoryIndex}>
-                  <Paper elevation={0} sx={{ display: "flex", justifyContent:"space-between", alignItems:'center' }}>
-                    <Typography textAlign="left" variant="h5" padding="1em">
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography textAlign="left" fontWeight='bold' variant="h5" padding="1em">
                       {menuCategory.categoryName}
+                      {/* <IconButton
+                        sx={{ marginLeft: "1em" }}
+                        onClick={() => setEdit(true)}
+                      >
+                        <EditIcon fontSize="large"></EditIcon>
+                      </IconButton> */}
                     </Typography>
-                    <Paper elevation={0} sx={{p:0}}>
-                    <Button variant="contained" style={{ backgroundColor: "green",color:"white" }} onClick={() => handleAddItemClick(menuCategory._id)}>
-                      Add Item
-                    </Button>
-                    <Button variant="contained" style={{ backgroundColor: "red",color:"white", marginLeft:"1em" }} onClick={() => handleRemoveMenuCategoryClick(menuCategory._id)}>
-                      Remove Menu Category
-                    </Button>
+                    {/* <TextField name="" value={menuCategory.categoryName} onChange={() => } /> */}
+                    <Paper elevation={0} sx={{ p: 0 }}>
+                      <Button
+                        variant="contained"
+                        style={{ backgroundColor: "green", color: "white" }}
+                        onClick={() => handleAddItemClick(menuCategory._id)}
+                      >
+                        Add Item
+                      </Button>
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "red",
+                          color: "white",
+                          marginLeft: "1em",
+                        }}
+                        onClick={() =>
+                          handleRemoveMenuCategoryClick(menuCategory._id)
+                        }
+                      >
+                        Remove Menu Category
+                      </Button>
                     </Paper>
                   </Paper>
 
-                  {
-                    menuCategory.Items.length===0 ?
-                  <Typography sx={{marginTop:"1em"}}>No Items in {menuCategory.categoryName}. Quickly Add!!</Typography>
-                  :
-                  <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                      <TableBody>
-                        <TableRow
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "flex-start",
-                            gap: "16px",
-                          }}
-                          hover
-                        >
-                          {menuCategory.Items.map((item, itemIndex) => (
-                            <TableCell style={{}} key={itemIndex}>
-                              <Paper
-                                elavation={4}
-                                sx={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  "& > :not(style)": {
-                                    m: 1,
-                                    width: 200,
-                                    height: 128,
-                                  },
-                                  "&:hover": {
-                                    cursor: "pointer",
-                                  },
-                                }}
-                                onClick={() => handleMenuItemClick(item)}
-                              >
-                                <ImageBoxWrapper>
-                                  <RoundedAvatar
-                                    src="https://www.licious.in/blog/wp-content/uploads/2022/06/mutton-hyderabadi-biryani-01-750x750.jpg"
-                                    alt="Your Image"
-                                  />
+                  {menuCategory.Items.length === 0 ? (
+                    <Typography sx={{ marginTop: "1em" }}>
+                      No Items in {menuCategory.categoryName}. Quickly Add!!
+                    </Typography>
+                  ) : (
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                      <Table stickyHeader aria-label="sticky table">
+                        <TableBody>
+                          <TableRow
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "flex-start",
+                              gap: "16px",
+                            }}
+                            hover
+                          >
+                            {menuCategory.Items.map((item, itemIndex) => (
+                              <TableCell style={{}} key={itemIndex}>
+                                <Paper
+                                  elavation={4}
+                                  sx={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    "& > :not(style)": {
+                                      m: 1,
+                                      width: 200,
+                                      height: 128,
+                                    },
+                                    "&:hover": {
+                                      cursor: "pointer",
+                                    },
+                                  }}
+                                  onClick={() => handleMenuItemClick(item)}
+                                >
+                                  <ImageBoxWrapper>
+                                    <RoundedAvatar
+                                      src="https://www.licious.in/blog/wp-content/uploads/2022/06/mutton-hyderabadi-biryani-01-750x750.jpg"
+                                      alt="Your Image"
+                                    />
 
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "green",
-                                      width: "auto",
-                                      marginLeft: "1em",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      height: "100px",
-                                    }}
-                                  >
-                                    <Typography
-                                      style={{ textTransform: "capitalize" }}
+                                    <Button
+                                      variant="contained"
+                                      style={{
+                                        backgroundColor: "green",
+                                        width: "auto",
+                                        marginLeft: "1em",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        height: "100px",
+                                      }}
                                     >
-                                      {item.itemName}
-                                    </Typography>
-                                  </Button>
-                                </ImageBoxWrapper>
-                              </Paper>
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                  }
+                                      <Typography
+                                        style={{ textTransform: "capitalize" }}
+                                      >
+                                        {item.itemName}
+                                      </Typography>
+                                    </Button>
+                                  </ImageBoxWrapper>
+                                </Paper>
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )}
                 </Container>
               ))
             : null}
@@ -298,7 +377,8 @@ const SectionMenu = (props) => {
                 // height: "60vh",
                 width: "80vw",
                 borderRadius: "1em",
-                maxHeight: "85vh", overflowY:'auto'
+                maxHeight: "85vh",
+                overflowY: "auto",
               }}
             >
               {backdropComponent ? backdropComponent : null}

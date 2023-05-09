@@ -449,7 +449,7 @@ const Restaurant = () => {
                       {restaurantFE.location.District}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Time: {currentSection.timing.Monday.open_time} to {currentSection.timing.Monday.close_time}
+                      Time: {currentSection.OpenTime} to {currentSection.CloseTime}
                     </Typography>
                   </Paper>
                 </Paper>
