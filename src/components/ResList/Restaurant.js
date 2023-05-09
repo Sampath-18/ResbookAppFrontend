@@ -76,7 +76,7 @@ const Restaurant = () => {
 
   const onAddMenuItemToFavoritesClick = async(itemId) => {
     try {
-      const operation = isFavoriteSection ? "$pull" : "$push";
+      const operation = isFavoriteSection ? "$pull" : "$addToSet";
       let response = await fetch(
         "http://localhost:8080/updateUserLikings/" + user._id,
         {
@@ -277,7 +277,7 @@ const Restaurant = () => {
       return;
     }
     try {
-      const operation = isFavoriteSection ? "$pull" : "$push";
+      const operation = isFavoriteSection ? "$pull" : "$addToSet";
       let response = await fetch(
         "http://localhost:8080/updateUserLikings/" + user._id,
         {
@@ -308,7 +308,7 @@ const Restaurant = () => {
       return;
     }
     try {
-      const operation = isSavedSection ? "$pull" : "$push";
+      const operation = isSavedSection ? "$pull" : "$addToSet";
       let response = await fetch(
         "http://localhost:8080/updateUserLikings/" + user._id,
         {

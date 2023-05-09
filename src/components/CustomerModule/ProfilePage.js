@@ -115,7 +115,7 @@ function ProfilePage(props) {
       <Divider />
       <List>
         {Object.entries({
-          "My Account":<UserDetails user={user} login={login} />,
+          "My Account":userLikings ? <UserDetails user={user} login={login} userLikings={userLikings} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching user favorites</div>,
           "Completed Dine-in Reservations":<UserBookings user={user} drawerWidth={drawerWidth} previous={true} />,
           "Upcoming Dine-in Reservations":<UserBookings user={user} drawerWidth={drawerWidth} future={true} />,
           "Saved Restaurants":userLikings ? <ResList restaurantIds={userLikings.savedRestaurants} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div> ,

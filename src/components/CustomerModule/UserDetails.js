@@ -38,41 +38,47 @@ const UserDetails = (props) => {
   // console.log(props.user);
   const [user, setUser] = useState(null);
 
-  const [eitem, setEitem] = useState(null);
+  const [editUserDetailsItem, setEditUserDetailsItem] = useState(null);
 
   const onUserDetailChange = (event) => {
-    setEitem({ ...eitem, [event.target.name]: event.target.value });
+    setEditUserDetailsItem({ ...editUserDetailsItem, [event.target.name]: event.target.value });
+  };
+
+  const [editUserLikingsItem, setEditUserLikingsItem] = useState(null);
+
+  const onUserLikingsChange = (event) => {
+    setEditUserLikingsItem({ ...editUserLikingsItem, [event.target.name]: event.target.value });
   };
 
   const onSaveUserClick = async () => {
     try {
-      console.log(isNaN(parseInt(eitem['Phone Number1'])));
-      if(isNaN(parseInt(eitem['Phone Number1'])) && isNaN(parseInt(eitem['Phone Number2'])) && isNaN(parseInt(eitem['Age'])))  
-      {
-        alert('Phone numbers and Age must be numeric');
-        return
+      console.log(isNaN(parseInt(editUserDetailsItem["Phone Number1"])));
+      if (
+        isNaN(parseInt(editUserDetailsItem["Phone Number1"])) &&
+        isNaN(parseInt(editUserDetailsItem["Phone Number2"])) &&
+        isNaN(parseInt(editUserDetailsItem["Age"]))
+      ) {
+        alert("Phone numbers and Age must be numeric");
+        return;
       }
-      if(eitem['Age']!=='')
-      {
-        let age = parseInt(eitem['Age'])
-        if(age<10 || age>70)
-        {
-          alert('Enter valid age(between 10 and 70');
-          return
+      if (editUserDetailsItem["Age"] !== "") {
+        let age = parseInt(editUserDetailsItem["Age"]);
+        if (age < 10 || age > 70) {
+          alert("Enter valid age(between 10 and 70");
+          return;
         }
       }
-      let userObj = {}
-      userObj['fname']=eitem['First Name']
-      userObj['lname']=eitem['Last Name']
-      userObj['email']=eitem['Email']
-      if(eitem['Phone Number1']!=='')
-        userObj['phone1']=eitem['Phone number1']
-      if(eitem['Phone Number2']!=='')
-        userObj['phone2']=eitem['Phone number2']
-      if(eitem['Age']!=='')
-        userObj['age']=parseInt(eitem['Age'])
-      userObj['gender']=eitem['Gender']
-      userObj['maritalStatus']=eitem['Marital Status']
+      let userObj = {};
+      userObj["fname"] = editUserDetailsItem["First Name"];
+      userObj["lname"] = editUserDetailsItem["Last Name"];
+      userObj["email"] = editUserDetailsItem["Email"];
+      if (editUserDetailsItem["Phone Number1"] !== "")
+        userObj["phone1"] = editUserDetailsItem["Phone number1"];
+      if (editUserDetailsItem["Phone Number2"] !== "")
+        userObj["phone2"] = editUserDetailsItem["Phone number2"];
+      if (editUserDetailsItem["Age"] !== "") userObj["age"] = parseInt(editUserDetailsItem["Age"]);
+      userObj["gender"] = editUserDetailsItem["Gender"];
+      userObj["maritalStatus"] = editUserDetailsItem["Marital Status"];
       // console.log(userObj);
       let userResponse = await fetch(
         "http://localhost:8080/updateUser/" + props.user._id,
@@ -87,16 +93,38 @@ const UserDetails = (props) => {
       userResponse = await userResponse.json();
       if (userResponse.success) {
         console.log("Updated User Successfully");
-        props.login(userResponse.user)//reloading user in the usercontext object(i.e. everywhere in the app)
-        setUser(eitem);
-        setEitem(null);
+        props.login(userResponse.user); //reloading user in the usercontext object(i.e. everywhere in the app)
+        setUser(editUserDetailsItem);
+        setEditUserDetailsItem(null);
       } else {
         console.log(userResponse.message);
       }
+
+      let userLikingsResponse = await fetch(
+        "http://localhost:8080/addUserFavorites/" + props.user._id,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({preferences:editUserLikingsItem}),
+        }
+      );
+      userLikingsResponse = await userLikingsResponse.json();
+      if (userLikingsResponse.success) {
+        console.log("Updated User Likings Successfully");
+        // props.login(userResponse.user); //reloading user in the usercontext object(i.e. everywhere in the app)
+        props.updateProps(userLikingsResponse.userlikings)
+        console.log(userLikingsResponse.userlikings);
+        setEditUserLikingsItem(null);
+      } else {
+        console.log(userResponse.message);
+      }
+      
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     setUser(
@@ -105,8 +133,12 @@ const UserDetails = (props) => {
             "First Name": props.user.fname,
             "Last Name": props.user.lname,
             Email: props.user.email,
-            "Phone number1": props.user.phone1 ? props.user.phone1 : "Not Provided",
-            "Phone number2": props.user.phone2 ? props.user.phone2 : "Not Provided",
+            "Phone number1": props.user.phone1
+              ? props.user.phone1
+              : "Not Provided",
+            "Phone number2": props.user.phone2
+              ? props.user.phone2
+              : "Not Provided",
             Age: props.user.age ? props.user.age : "Not Provided",
             Gender: props.user.gender,
             "Marital Status": props.user.maritalStatus,
@@ -142,38 +174,40 @@ const UserDetails = (props) => {
             My Profile
           </Typography>
         </ImageBoxWrapper>
-        {eitem ? (
-          <div sx={{display:'flex'}}><Button
-            sx={{
-              backgroundColor: "green",
-              color: "white",
-              marginRight: "1em",
-              "&:hover": {
-                backgroundColor: "#8c3273",
+        {editUserDetailsItem ? (
+          <div sx={{ display: "flex" }}>
+            <Button
+              sx={{
+                backgroundColor: "green",
                 color: "white",
-              },
-            }}
-            onClick={() => onSaveUserClick()}
-          >
-            Save
-          </Button>
-          <Button
-            sx={{
-              backgroundColor: "red",
-              color: "white",
-              marginRight: "2em",
-              "&:hover": {
-                backgroundColor: "#8c3273",
+                marginRight: "1em",
+                "&:hover": {
+                  backgroundColor: "#8c3273",
+                  color: "white",
+                },
+              }}
+              onClick={() => onSaveUserClick()}
+            >
+              Save
+            </Button>
+            <Button
+              sx={{
+                backgroundColor: "red",
                 color: "white",
-              },
-            }}
-            onClick={() => setEitem(null)}
-          >
-            Cancel
-          </Button></div>
+                marginRight: "2em",
+                "&:hover": {
+                  backgroundColor: "#8c3273",
+                  color: "white",
+                },
+              }}
+              onClick={() => {setEditUserDetailsItem(null);setEditUserLikingsItem(null)}}
+            >
+              Cancel
+            </Button>
+          </div>
         ) : (
           <IconButton
-            onClick={() => setEitem(JSON.parse(JSON.stringify(user)))}
+            onClick={() => {setEditUserDetailsItem(JSON.parse(JSON.stringify(user)));setEditUserLikingsItem(JSON.parse(JSON.stringify(props.userLikings)));}}
             sx={{ marginRight: "2em" }}
           >
             <EditIcon fontSize="large" />
@@ -185,18 +219,19 @@ const UserDetails = (props) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          gap:'3em'
         }}
       >
         <TableContainer
           component={Paper}
           style={{ maxWidth: 600, marginTop: "1em" }}
         >
-          {eitem ? (
+          {editUserDetailsItem ? (
             <Table>
               <TableBody>
                 {/* {students.map((student, index) => ( */}
                 {/* <React.Fragment key={index}> */}
-                {Object.entries(eitem).map(([field, value], index) => (
+                {Object.entries(editUserDetailsItem).map(([field, value], index) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Typography variant="h6">{field}</Typography>
@@ -262,7 +297,7 @@ const UserDetails = (props) => {
                       <Typography variant="h6">{field}</Typography>
                     </TableCell>
                     <TableCell>
-                    <Typography>{value}</Typography>
+                      <Typography>{value}</Typography>
                       {/* {field === "Gender" ? (
                         <Select
                           sx={{ width: "80%" }}
@@ -305,109 +340,135 @@ const UserDetails = (props) => {
             </Table>
           )}
         </TableContainer>
-        <Box
-          sx={{
-            width: "30%",
-            // height: "75vh",
-            backgroundColor: "gray",
-            marginTop: "1em",
-          }}
-        >
-          <Typography variant="h5">Preferences</Typography>
-          <Box
-            sx={{
-              minHeight: "10vh",
 
-              backgroundColor: "white",
-              display: "flex",
-              justifyContent: "center",
-              borderRadius: "1em",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-evenly",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="contained">Veg</Button>
-              <Button variant="contained">Non-Veg</Button>
-              <Button variant="contained">Both</Button>
-            </div>
-          </Box>
-          <Box
-            sx={{
-              minHeight: "10vh",
-              marginTop: "2em",
-              backgroundColor: "white",
-              display: "flex",
-              justifyContent: "center",
-              borderRadius: "1em",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-evenly",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="contained">Drinker</Button>
-              <Button variant="contained">Non-Drinker</Button>
-            </div>
-          </Box>
-          <Box
-            sx={{
-              minHeight: "10vh",
-              marginTop: "2em",
-              backgroundColor: "white",
-              display: "flex",
-              justifyContent: "center",
-              borderRadius: "1em",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-evenly",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="contained">Smoker</Button>
-              <Button variant="contained">Non-Smoker</Button>
-            </div>
-          </Box>
-          <Box
-            sx={{
-              minHeight: "10vh",
-              marginTop: "2em",
-              backgroundColor: "white",
-              display: "flex",
-              justifyContent: "center",
-              borderRadius: "1em",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-evenly",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="contained">Budget</Button>
-              <Button variant="contained">Quality</Button>
-            </div>
-          </Box>
-        </Box>
+        <TableContainer
+          component={Paper}
+          style={{ maxWidth: 600, marginTop: "1em" }}
+        >
+          {editUserLikingsItem ? (
+            <Table>
+              <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Food Type</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Select
+                          sx={{ width: "80%" }}
+                          name={'foodType'}
+                          value={editUserLikingsItem.foodType}
+                          onChange={onUserLikingsChange}
+                          displayEmpty
+                        >
+                          {['Veg','Non-Veg','Both'].map((option, index) => (
+                            <MenuItem key={index} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Drinking Habit</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Select
+                          sx={{ width: "80%" }}
+                          name={'drinking'}
+                          value={editUserLikingsItem.drinking}
+                          onChange={onUserLikingsChange}
+                          displayEmpty
+                        >
+                          {['Drinker','Non-Drinker'].map((option, index) => (
+                            <MenuItem key={index} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Smoking Habit</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Select
+                          sx={{ width: "80%" }}
+                          name={'smoking'}
+                          value={editUserLikingsItem.smoking}
+                          onChange={onUserLikingsChange}
+                          displayEmpty
+                        >
+                          {['Smoker','Non-Smoker'].map((option, index) => (
+                            <MenuItem key={index} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Preference</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Select
+                          sx={{ width: "80%" }}
+                          name={'preference'}
+                          value={editUserLikingsItem.preference}
+                          onChange={onUserLikingsChange}
+                          displayEmpty
+                        >
+                          {['Budget','Quality'].map((option, index) => (
+                            <MenuItem key={index} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                    </TableCell>
+                  </TableRow>
+              </TableBody>
+            </Table>
+          ) : (
+            <Table>
+              <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Food Type</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Typography>{props.userLikings.foodType}</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Drinking Habit</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Typography>{props.userLikings.drinking}</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Smoking Habit</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Typography>{props.userLikings.smoking}</Typography>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="h6">Preference</Typography>
+                    </TableCell>
+                    <TableCell>
+                    <Typography>{props.userLikings.preference}</Typography>
+                    </TableCell>
+                  </TableRow>
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
       </Container>
     </Container>
   ) : (

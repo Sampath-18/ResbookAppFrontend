@@ -32,7 +32,7 @@ export default function RestaurantTile(props) {
       alert("Login to save!!!")
       return
     }
-    const operation = isRestaurantSaved ? "$pull":"$push"
+    const operation = isRestaurantSaved ? "$pull":"$addToSet"
     try {
       let response = await fetch("http://localhost:8080/updateUserLikings/"+props.userlikings.userId,{
         method:"POST",
@@ -63,7 +63,7 @@ export default function RestaurantTile(props) {
       alert("Login to favorite!!!")
       return
     }
-    const operation = isRestaurantFavorited ? "$pull":"$push"
+    const operation = isRestaurantFavorited ? "$pull":"$addToSet"
     try {
       let response = await fetch("http://localhost:8080/updateUserLikings/"+props.userlikings.userId,{
         method:"POST",
