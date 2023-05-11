@@ -76,14 +76,14 @@ const Restaurant = () => {
 
   const onAddMenuItemToFavoritesClick = async(itemId) => {
     try {
-      const operation = isFavoriteSection ? "$pull" : "$addToSet";
+      // const operation = isFavoriteSection ? "$pull" : "$addToSet";
       let response = await fetch(
         "http://localhost:8080/updateUserLikings/" + user._id,
         {
           method: "POST",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify({
-            operation: operation,
+            operation: "$addToSet",
             favType: "favMenuItems",
             id: itemId,
           }),
@@ -91,8 +91,9 @@ const Restaurant = () => {
       );
       response = await response.json();
       if (response.success) {
+        alert('added item to favorites succesfully!')
         setUserlikings(response.userlikings);
-        setIsFavoriteSection(!isFavoriteSection);
+        // setIsFavoriteSection(!isFavoriteSection);
       }
     } catch (error) {
       console.error(error);

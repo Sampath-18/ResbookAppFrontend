@@ -29,6 +29,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuItemDetailed from "./MenuItemDetailed";
 import AddMenuItem from "./AddMenuItem";
 import AddMenuCategory from "./AddMenuCategory";
+
+// import dotenv from 'dotenv'
+// dotenv.config()
+
 // const navigate = useNavigate();
 const ImageBoxWrapper = styled(Box)({
   display: "flex",
@@ -88,10 +92,12 @@ const SectionMenu = (props) => {
     setBackdropComponent(null);
   };
 
+  //        '${process.env.NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/'
   async function fetchMenu(sectionId) {
     try {
+      console.log(`${process.env.NODEJS_BACKEND_API_ENDPOINT}`);
       let menuResponse = await fetch(
-        "http://localhost:8080/" + sectionId + "/getWholeSectionMenu/",
+        `${process.env.NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/`,
         {
           method: "GET",
           headers: {
