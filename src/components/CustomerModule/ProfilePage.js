@@ -22,6 +22,7 @@ import { UserContext } from "../contexts/UserContext";
 import UserDetails from "./UserDetails";
 import UserBookings from "./UserBookings";
 import ResList from "../ResList/ResList";
+import MyFavourite from "./MyFavourite";
 
 const drawerWidth = 240;
 
@@ -120,7 +121,7 @@ function ProfilePage(props) {
           "Upcoming Dine-in Reservations":<UserBookings user={user} drawerWidth={drawerWidth} future={true} />,
           "Saved Restaurants":userLikings ? <ResList restaurantIds={userLikings.savedRestaurants} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div> ,
           "Favourite Restaurants":userLikings ? <ResList restaurantIds={userLikings.favRestaurants} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div>,
-          "My favourites":<></>,
+          "My favourites":userLikings ? <MyFavourite userLikings={userLikings} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div>,
         }).map(([text,component], index) => (
           <ListItem onClick={() => setSelectedComponent(component)} key={text} disablePadding>
             <ListItemButton>

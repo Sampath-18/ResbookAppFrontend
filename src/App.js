@@ -32,7 +32,7 @@ import AdminView from "./components/AdminView/AdminView";
 // import { DataContext } from "./components/contexts/UserContext";
 import FavCuisineSelection from "./components/CustomerModule/FavCuisineSelection";
 // import MenuItem from "./components/Menu/MenuItem";
-
+// require('dotenv').config()
 
 function App(props) {
 
