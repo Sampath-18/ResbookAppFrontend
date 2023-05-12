@@ -15,10 +15,12 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import GoogleIcon from "@mui/icons-material/Google";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import NavBar from "../components/NavBar/NavBar";
 
 const Home = () => {
   return (
     <>
+      {/* <NavBar /> */}
       <ResList />
       <MDBFooter
         bgColor="light"

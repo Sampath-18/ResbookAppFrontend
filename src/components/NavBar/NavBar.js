@@ -81,6 +81,7 @@ function NavBar() {
   }
 
   const {user, login, logout} = React.useContext(UserContext);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -205,6 +206,8 @@ function NavBar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
             />
           </Search>
 

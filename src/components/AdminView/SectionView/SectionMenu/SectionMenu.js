@@ -30,8 +30,6 @@ import MenuItemDetailed from "./MenuItemDetailed";
 import AddMenuItem from "./AddMenuItem";
 import AddMenuCategory from "./AddMenuCategory";
 
-// import dotenv from 'dotenv'
-// dotenv.config()
 
 // const navigate = useNavigate();
 const ImageBoxWrapper = styled(Box)({
@@ -95,9 +93,9 @@ const SectionMenu = (props) => {
   //        '${process.env.NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/'
   async function fetchMenu(sectionId) {
     try {
-      console.log(`${process.env.NODEJS_BACKEND_API_ENDPOINT}`);
+      // console.log(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}`);
       let menuResponse = await fetch(
-        `${process.env.NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/`,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/`,
         {
           method: "GET",
           headers: {
@@ -107,7 +105,7 @@ const SectionMenu = (props) => {
       );
       menuResponse = await menuResponse.json();
       if (menuResponse.success) {
-        setMenu(menuResponse.menu);
+        setMenu(menuResponse.menu)
         console.log("Menu fetched successfully");
       } else {
         console.log("Fetch Menu Failed");
