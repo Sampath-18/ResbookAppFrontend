@@ -41,7 +41,7 @@ function App(props) {
   const { pathname } = location;
 
   console.log(pathname);
-  const showNavbar = !["/RestaurantAdminView/"].some(route => pathname.startsWith(route));
+  const showNavbar = !["/RestaurantAdminView/","/ProfilePage/"].some(route => pathname.startsWith(route));
 
   console.log(!["/RestaurantAdminView/"].some(route => pathname.startsWith(route)));
 

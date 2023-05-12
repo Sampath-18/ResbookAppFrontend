@@ -148,11 +148,11 @@ const UserDetails = (props) => {
   }, [props]);
 
   return user ? (
-    <Container>
+    <Container sx={{marginTop:props.mt ? props.mt : 0}}>
       <Paper
         elavation={4}
         sx={{
-          marginTop: "3em",
+          // marginTop: "3em",
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "space-between",

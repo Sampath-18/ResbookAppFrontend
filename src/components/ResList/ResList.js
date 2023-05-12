@@ -243,11 +243,11 @@ const ResList = (props) => {
   };
 
   return restaurants === null ? (
-    <Typography variant="h4">
+    <Typography sx={{marginTop:props.mt ? props.mt :0 }} variant="h4">
       Don't get upset, poonakalu Loading.....
     </Typography>
   ) : (
-    <Container sx={{ top: "15%" }}>
+    <Container sx={{ top: "15%",marginTop:props.mt ? props.mt :0 }}>
       <Box sx={{ flexGrow: 1 }}>
         <Grid
           container

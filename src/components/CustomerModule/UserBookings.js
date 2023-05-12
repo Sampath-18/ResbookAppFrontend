@@ -54,7 +54,7 @@ const UserBookings = (props) => {
         display: "flex",
         flexDirection: "column",
         flexGrow: 1,
-        marginTop: "1em",
+        marginTop: props.mt ? props.mt : "1em",
         p: 3,
         width: { sm: `calc(100% - ${props.drawerWidth}px)` },
       }}
