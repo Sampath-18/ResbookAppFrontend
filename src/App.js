@@ -2,7 +2,7 @@
 import "./App.css";
 import Home from "./pages/Home";
 import Restaurant from "./components/ResList/Restaurant";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import RestaurantIntake from "./components/AddRestaurant/RestaurantIntake";
 import SectionsIntake from "./components/AddRestaurant/SectionsIntake";
 import MenuIntake from "./components/AddRestaurant/MenuIntake";
@@ -37,9 +37,20 @@ function App(props) {
 
   const { user, login, logout } = useContext(UserContext);
 
+  const location = useLocation();
+  const { pathname } = location;
+
+  console.log(pathname);
+  const showNavbar = !["/RestaurantAdminView/"].some(route => pathname.startsWith(route));
+
+  console.log(!["/RestaurantAdminView/"].some(route => pathname.startsWith(route)));
+
   return (
       <div className="App">
-        <Navbar />
+        {showNavbar ?
+        <Navbar isRestaurantLogin={false} />
+        :
+        null}
         {
           user===null ? <></> : <div>{user.email}</div>
         }

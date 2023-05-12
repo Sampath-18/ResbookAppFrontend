@@ -13,12 +13,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MailIcon from "@mui/icons-material/Mail";
 import Toolbar from "@mui/material/Toolbar";
-import { Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AdminDetails from "./AdminDetails";
 import SectionAdminView from "./SectionView/SectionAdminView";
 import MyProfile from "./MyProfile";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -42,9 +42,8 @@ const AdminView = (props) => {
   const [restaurant, setRestaurant] = React.useState(null);
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [selectedComponent, setSelectedComponent] = React.useState(
-    <AdminDetails restaurant={restaurant} />
-  );
+  const [selectedComponent, setSelectedComponent] = React.useState( <AdminDetails restaurant={restaurant} /> );
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -200,7 +199,7 @@ const AdminView = (props) => {
               text: "Profile",
               component: <MyProfile restaurant={restaurant} setAdminDetails={(admin)=>setRestaurant({...restaurant,admin:admin})} />,
             },
-            { text: "Log Out", component: <div>Logout</div> },
+            { text: "Log Out", component: (<Typography marginLeft='2em'>Are you sure, do you want to logout?<Button sx={{backgroundColor:'green',color:'white',ml:'1em','&:hover':{backgroundColor:'#06ad03',color:'white'}}} onClick={() => navigate('/')}>Yes</Button></Typography>) },
           ].map(({ text, component }, index) => (
             <ListItem key={index} disablePadding>
               {/* <Link to={path} style={{ textDecoration: "none" }}> */}
@@ -227,13 +226,17 @@ const AdminView = (props) => {
     
   useEffect(() => {
     fetchRestaurant(id);
-    setSelectedComponent(<AdminDetails restaurant={restaurant} />)
   }, [updateRestaurant]);
+
+  useEffect(() => {
+    setSelectedComponent(<AdminDetails restaurant={restaurant} />)
+  }, [restaurant])
+  
 
 
   return (
     restaurant ?
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex",marginTop:'2em' }}>
       <CssBaseline />
 
       {/* Box for drawer */}

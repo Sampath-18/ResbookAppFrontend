@@ -62,7 +62,7 @@ const Search = styled('div')(({ theme }) => ({
 const pages = {'Home':'/', 'Book a Table':'/', 'Blog':'/Blogs'};
 const settings = {'Profile':'/ProfilePage', 'Dashboard':'/', 'Logout':'/'};
 
-function NavBar() {
+function NavBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   // console.log(Object.keys(pages));
@@ -109,7 +109,9 @@ function NavBar() {
   };
 
   return (
-    <>
+    props.isRestaurantLogin ?
+    null
+    :
     <AppBar position="static" sx={{marginBottom:'1.5em'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -210,19 +212,24 @@ function NavBar() {
               onChange={(event) => setSearchQuery(event.target.value)}
             />
           </Search>
-
+          {user ?
+          null
+          :
           <Button
             onClick={() => navigate("/Login")}
             sx={{ my: 2, color: 'white', display: 'block'}}
           >
             LOGIN
-          </Button>
+          </Button>}
+          {user ?
+          null
+          :
           <Button
             onClick={() => navigate("/Signup")}
             sx={{ my: 2, color: 'white', display: 'block'}}
           >
             SIGNUP
-          </Button>
+          </Button>}
           {/* <Typography textAlign="center" sx={{paddingRight:'1em'}} onClick={() => navigate("/Login")}>LOGIN</Typography>
           <Typography textAlign="center" sx={{paddingRight:'1em'}} onClick={() => navigate("/Signup")}>SIGNUP</Typography> */}
 
@@ -260,7 +267,6 @@ function NavBar() {
         </Toolbar>
       </Container>
     </AppBar>
-    </>
   );
 }
 export default NavBar;

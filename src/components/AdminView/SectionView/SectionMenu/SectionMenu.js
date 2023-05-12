@@ -9,10 +9,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TextField,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import EditIcon from "@mui/icons-material/Edit";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -108,6 +106,7 @@ const SectionMenu = (props) => {
         setMenu(menuResponse.menu)
         console.log("Menu fetched successfully");
       } else {
+        // setMenu([])
         console.log("Fetch Menu Failed");
       }
     } catch (error) {
@@ -256,7 +255,11 @@ const SectionMenu = (props) => {
             Add Menu Category
           </Button>
           {menu
-            ? menu.map((menuCategory, categoryIndex) => (
+            ? 
+            menu.length===0 ?
+            <Typography sx={{marginTop:'2em'}}>Menu is empty. Quickly add menu to attract your customers!!!</Typography>
+            :
+            menu.map((menuCategory, categoryIndex) => (
                 <Container key={categoryIndex}>
                   <Paper
                     elevation={0}
@@ -370,7 +373,7 @@ const SectionMenu = (props) => {
                   )}
                 </Container>
               ))
-            : null}
+            : <Typography sx={{marginTop:'2em'}}>Loading Menu...</Typography>}
           <Backdrop
             sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={backdropComponent ? true : false}

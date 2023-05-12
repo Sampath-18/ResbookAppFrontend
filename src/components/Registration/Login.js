@@ -154,6 +154,7 @@ const Login = () => {
         // login(responseJson.user);
         // console.log("Logged in successfully!!!");
         // navigate("/");
+        
         navigate("/RestaurantAdminView/" + responseJson.restaurantId);
       }
     } catch (error) {

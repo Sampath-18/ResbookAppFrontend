@@ -97,6 +97,9 @@ export default function RestaurantTile(props) {
           image={props.restaurant.img}
           alt={props.restaurant.name+" + "+props.restaurant._id}
         />
+        <Button variant="contained" sx={{color:"white",position:"absolute",top:10,left:-30, backgroundColor:props.restaurant.currentStatus==='Open' ? 'green':'red', width:'115px',transform:'rotate(315deg)'}}>
+          {props.restaurant.currentStatus}
+        </Button>
         <Button variant="contained" sx={{color:"white",position:"absolute",top:7.5,right:7.5, minWidth:'30px', maxWidth:'40px'}}>
           {props.restaurant.rating.toFixed(1)}
         </Button>

@@ -172,6 +172,7 @@ const ResList = (props) => {
             city: restaurant.location.District,
             img: restaurant.coverImage.url,
             rating: restaurant.rating,
+            currentStatus: restaurant.currentStatus
           });
         }
         setRestaurants(restaurantsCopy);
