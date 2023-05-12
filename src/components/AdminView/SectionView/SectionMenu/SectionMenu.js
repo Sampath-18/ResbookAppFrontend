@@ -9,10 +9,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  TextField,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import EditIcon from "@mui/icons-material/Edit";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -30,8 +28,6 @@ import MenuItemDetailed from "./MenuItemDetailed";
 import AddMenuItem from "./AddMenuItem";
 import AddMenuCategory from "./AddMenuCategory";
 
-// import dotenv from 'dotenv'
-// dotenv.config()
 
 // const navigate = useNavigate();
 const ImageBoxWrapper = styled(Box)({
@@ -95,9 +91,9 @@ const SectionMenu = (props) => {
   //        '${process.env.NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/'
   async function fetchMenu(sectionId) {
     try {
-      console.log(`${process.env.NODEJS_BACKEND_API_ENDPOINT}`);
+      // console.log(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}`);
       let menuResponse = await fetch(
-        `${process.env.NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/`,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/${sectionId}/getWholeSectionMenu/`,
         {
           method: "GET",
           headers: {
@@ -107,9 +103,10 @@ const SectionMenu = (props) => {
       );
       menuResponse = await menuResponse.json();
       if (menuResponse.success) {
-        setMenu(menuResponse.menu);
+        setMenu(menuResponse.menu)
         console.log("Menu fetched successfully");
       } else {
+        // setMenu([])
         console.log("Fetch Menu Failed");
       }
     } catch (error) {
@@ -258,7 +255,11 @@ const SectionMenu = (props) => {
             Add Menu Category
           </Button>
           {menu
-            ? menu.map((menuCategory, categoryIndex) => (
+            ? 
+            menu.length===0 ?
+            <Typography sx={{marginTop:'2em'}}>Menu is empty. Quickly add menu to attract your customers!!!</Typography>
+            :
+            menu.map((menuCategory, categoryIndex) => (
                 <Container key={categoryIndex}>
                   <Paper
                     elevation={0}
@@ -372,7 +373,7 @@ const SectionMenu = (props) => {
                   )}
                 </Container>
               ))
-            : null}
+            : <Typography sx={{marginTop:'2em'}}>Loading Menu...</Typography>}
           <Backdrop
             sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={backdropComponent ? true : false}

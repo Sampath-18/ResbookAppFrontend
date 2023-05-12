@@ -135,7 +135,7 @@ const SectionAdminView = (props) => {
               },
               {
                 text: <Typography variant="h5">Stats</Typography>,
-                component: <div>All Bookings here</div>,
+                component: <div>Statistics here</div>,
               },
               {
                 text: <Typography variant="h5">Menu</Typography>,
@@ -148,9 +148,9 @@ const SectionAdminView = (props) => {
 
               {
                 text: <Typography variant="h5">Remove section</Typography>,
-                component: <Container>
+                component: <Container sx={{marginTop:'2em'}}>
                   <Typography>Are you sure, Do you want to remove the section? This action is irreversible</Typography>
-                  <Button variant="outlined" sx={{backgroundColor:"red",color:"white"}} onClick={() => deleteSection(props.section._id,props.restaurant._id)}>Delete</Button>
+                  <Button variant="outlined" sx={{backgroundColor:"red",color:"white",marginTop:'1em'}} onClick={() => deleteSection(props.section._id,props.restaurant._id)}>Delete</Button>
                 </Container>,
               },
             ].map(({ text, component }, index) => (
