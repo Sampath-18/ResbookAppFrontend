@@ -139,13 +139,13 @@ const MyFavourite = (props) => {
   };
 
   return (
-    <Container>
+    <Container sx={{marginTop:props.mt ? props.mt :0}}>
       <Box
         sx={{
           width: "100%",
           height: 80,
           backgroundColor: "primary.dark",
-          marginTop: "1.1em",
+          // marginTop: "1.1em",
           borderRadius: "1em",
           display: "flex",
           justifyContent: "space-between",

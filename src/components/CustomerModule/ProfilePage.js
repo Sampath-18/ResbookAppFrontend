@@ -23,6 +23,7 @@ import UserDetails from "./UserDetails";
 import UserBookings from "./UserBookings";
 import ResList from "../ResList/ResList";
 import MyFavourite from "./MyFavourite";
+import { Button } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -109,6 +110,7 @@ function ProfilePage(props) {
   }, [user]);
 
   const navigate = useNavigate();
+  const appBarHeight='64px';
 
   const drawer = (
     <div>
@@ -116,12 +118,13 @@ function ProfilePage(props) {
       <Divider />
       <List>
         {Object.entries({
-          "My Account":userLikings ? <UserDetails user={user} login={login} userLikings={userLikings} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching user favorites</div>,
-          "Completed Dine-in Reservations":<UserBookings user={user} drawerWidth={drawerWidth} previous={true} />,
-          "Upcoming Dine-in Reservations":<UserBookings user={user} drawerWidth={drawerWidth} future={true} />,
-          "Saved Restaurants":userLikings ? <ResList restaurantIds={userLikings.savedRestaurants} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div> ,
-          "Favourite Restaurants":userLikings ? <ResList restaurantIds={userLikings.favRestaurants} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div>,
-          "My favourites":userLikings ? <MyFavourite userLikings={userLikings} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div>,
+          "My Account":userLikings ? <UserDetails mt={appBarHeight} user={user} login={login} userLikings={userLikings} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching user favorites</div>,
+          "Completed Dine-in Reservations":<UserBookings mt={appBarHeight} user={user} drawerWidth={drawerWidth} previous={true} />,
+          "Upcoming Dine-in Reservations":<UserBookings mt={appBarHeight} user={user} drawerWidth={drawerWidth} future={true} />,
+          "Saved Restaurants":userLikings ? <ResList mt={appBarHeight} restaurantIds={userLikings.savedRestaurants} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div> ,
+          "Favourite Restaurants":userLikings ? <ResList mt={appBarHeight} restaurantIds={userLikings.favRestaurants} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div>,
+          "My favourites":userLikings ? <MyFavourite mt={appBarHeight} userLikings={userLikings} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div>,
+          "Logout":<Typography sx={{marginTop:appBarHeight}}>Are you sure, Do you want to logout?<Button sx={{backgroundColor:'green',color:'white',ml:'1em','&:hover':{backgroundColor:'#06ad03',color:'white'}}} onClick={() => {logout();navigate('/')}}>Yes</Button></Typography>
         }).map(([text,component], index) => (
           <ListItem onClick={() => setSelectedComponent(component)} key={text} disablePadding>
             <ListItemButton>
@@ -147,9 +150,8 @@ function ProfilePage(props) {
         <AppBar
           position="fixed"
           sx={{
-            marginTop: "4.32em",
             width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
+            ml: { sm: `${drawerWidth}px` }
           }}
         >
           <Toolbar>
@@ -186,7 +188,6 @@ function ProfilePage(props) {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
-                marginTop: "4.32em",
               },
             }}
           >
@@ -200,7 +201,6 @@ function ProfilePage(props) {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
-                marginTop: "4.32em",
               },
             }}
             open
@@ -208,10 +208,7 @@ function ProfilePage(props) {
             {drawer}
           </Drawer>
         </Box>
-        {selectedComponent}
-        {/* <UserDetails user={user} login={login} /> */}
-        {/* add your profile code here */}
-        
+        {selectedComponent}        
       </Box>
     </>
   );
