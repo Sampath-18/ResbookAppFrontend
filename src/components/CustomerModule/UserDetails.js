@@ -81,7 +81,7 @@ const UserDetails = (props) => {
       userObj["maritalStatus"] = editUserDetailsItem["Marital Status"];
       // console.log(userObj);
       let userResponse = await fetch(
-        "http://localhost:8080/updateUser/" + props.user._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUser/` + props.user._id,
         {
           method: "POST",
           headers: {
@@ -101,7 +101,7 @@ const UserDetails = (props) => {
       }
 
       let userLikingsResponse = await fetch(
-        "http://localhost:8080/addUserFavorites/" + props.user._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/addUserFavorites/` + props.user._id,
         {
           method: "POST",
           headers: {

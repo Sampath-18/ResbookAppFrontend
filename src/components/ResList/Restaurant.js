@@ -78,7 +78,7 @@ const Restaurant = () => {
     try {
       // const operation = isFavoriteSection ? "$pull" : "$addToSet";
       let response = await fetch(
-        "http://localhost:8080/updateUserLikings/" + user._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUserLikings/` + user._id,
         {
           method: "POST",
           headers: { "Content-type": "application/json" },
@@ -106,7 +106,7 @@ const Restaurant = () => {
       const rid = id;
       try {
         let restaurant = await fetch(
-          "http://localhost:8080/getRestaurant/" + id,
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getRestaurant/` + id,
           {
             method: "GET",
             headers: {
@@ -120,7 +120,7 @@ const Restaurant = () => {
           // console.log(restaurant);
           // const restaurantResponse = restaurant.restaurant
           let sections = await fetch(
-            "http://localhost:8080/" + rid + "/getSections",
+            `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/` + rid + "/getSections",
             {
               method: "GET",
               headers: {
@@ -136,7 +136,7 @@ const Restaurant = () => {
               const menu = [];
               for (const menuCategoryId of section.menu) {
                 let menuCategory = await fetch(
-                  "http://localhost:8080/getMenuCategory/" + menuCategoryId,
+                  `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getMenuCategory/` + menuCategoryId,
                   {
                     method: "GET",
                     headers: {
@@ -183,7 +183,7 @@ const Restaurant = () => {
       }
       try {
         let userLikings = await fetch(
-          "http://localhost:8080/getUserLikings/" + user._id,
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getUserLikings/` + user._id,
           {
             method: "GET",
             headers: {
@@ -280,7 +280,7 @@ const Restaurant = () => {
     try {
       const operation = isFavoriteSection ? "$pull" : "$addToSet";
       let response = await fetch(
-        "http://localhost:8080/updateUserLikings/" + user._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUserLikings/` + user._id,
         {
           method: "POST",
           headers: { "Content-type": "application/json" },
@@ -311,7 +311,7 @@ const Restaurant = () => {
     try {
       const operation = isSavedSection ? "$pull" : "$addToSet";
       let response = await fetch(
-        "http://localhost:8080/updateUserLikings/" + user._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUserLikings/` + user._id,
         {
           method: "POST",
           headers: { "Content-type": "application/json" },
@@ -371,7 +371,7 @@ const Restaurant = () => {
       if (booking.userId) {
         console.log(currentSection.autoAcceptBookings);
         let bookingResponse = await fetch(
-          "http://localhost:8080/bookDineinSection",
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/bookDineinSection`,
           {
             method: "POST",
             headers: {

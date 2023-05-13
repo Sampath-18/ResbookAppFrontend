@@ -12,7 +12,7 @@ const AddMenuCategory = (props) => {
   const onSaveClick = async () => {
     try {
       const menucategoryResponse = await fetch(
-        "http://localhost:8080/updateRestaurant/updateSection/addMenuCategory/" +
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/updateSection/addMenuCategory/` +
           props.sectionId,
         {
           method: "POST",
@@ -34,7 +34,7 @@ const AddMenuCategory = (props) => {
             console.log("item adding:", JSON.stringify(menuItem));
             // console.log("End point called:","http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/"+categoryId)
             const menuItemResponse = await fetch(
-              "http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/" +
+              `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/` +
                 categoryId,
               {
                 method: "POST",

@@ -11,7 +11,7 @@ const UserBookingSummary = (props) => {
   const updateBookingStatus = async () => {
     try {
       let updateStatusResponse = await fetch(
-        "http://localhost:8080/updateDineinBooking/" +
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateDineinBooking/` +
           props.booking.booking._id,
         {
           method: "POST",

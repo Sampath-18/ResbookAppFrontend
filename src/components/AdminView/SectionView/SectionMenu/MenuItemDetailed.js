@@ -33,7 +33,7 @@ const MenuItemDetailed = (props) => {
       setEdit(false);
       // console.log(eitem);
       let itemResponse = await fetch(
-        "http://localhost:8080/updateMenuItem/" + eitem._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateMenuItem/` + eitem._id,
         {
           method: "POST",
           headers: {
@@ -100,7 +100,7 @@ const MenuItemDetailed = (props) => {
       // setEdit(false);
       // console.log(eitem);
       let itemResponse = await fetch(
-        "http://localhost:8080/deleteMenuItem/" + item._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/deleteMenuItem/` + item._id,
         {
           method: "GET",
           headers: {

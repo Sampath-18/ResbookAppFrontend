@@ -56,7 +56,7 @@ const Reviews = (props) => {
       const last = Math.min(props.reviews.length,3+reviews.length)
       let newReviews = []
       for (let i = reviews.length; i < last; i++) {
-        let reviewResponse = await fetch("http://localhost:8080/getReview/"+(props.reviews)[i], {
+        let reviewResponse = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getReview/`+(props.reviews)[i], {
           method:"GET",
           headers: {
             "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const Reviews = (props) => {
         const last = Math.min(props.reviews.length,3+reviews.length)
         let newReviews = []
         for (let i = 0; i < last; i++) {
-          let reviewResponse = await fetch("http://localhost:8080/getReview/"+(props.reviews)[i], {
+          let reviewResponse = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getReview/`+(props.reviews)[i], {
             method:"GET",
             headers: {
               "Content-Type": "application/json",

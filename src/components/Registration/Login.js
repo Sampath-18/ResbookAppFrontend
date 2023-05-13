@@ -42,7 +42,7 @@ const Login = () => {
       // console.log(forgotDetails)
       if (isRestaurantLogin) {
         const response = await fetch(
-          "http://localhost:8080/setRestaurantPassword",
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/setRestaurantPassword`,
           {
             method: "POST",
             headers: {
@@ -64,7 +64,7 @@ const Login = () => {
         }
         setIsForgotPassword(false);
       } else {
-        const response = await fetch("http://localhost:8080/setUserPassword", {
+        const response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/setUserPassword`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const Login = () => {
   const handleUserLogin = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +137,7 @@ const Login = () => {
     try {
       console.log("Restaurant login tried!");
       event.preventDefault();
-      const response = await fetch("http://localhost:8080/restaurantLogin", {
+      const response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/restaurantLogin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

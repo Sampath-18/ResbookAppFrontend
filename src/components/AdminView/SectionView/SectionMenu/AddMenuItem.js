@@ -15,7 +15,7 @@ const AddMenuItem = (props) => {
   const onAddClick = async () => {
     try {
       const menuItemResponse = await fetch(
-        "http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/" +
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/` +
           props.menuCategoryId,
         {
           method: "POST",

@@ -53,7 +53,7 @@ const AdminView = (props) => {
     // console.log("called");
     try {
       const restaurantResponse = await fetch(
-        "http://localhost:8080/getRestaurant/" + restaurantId,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getRestaurant/` + restaurantId,
         {
           method: "GET",
           headers: {
@@ -65,7 +65,7 @@ const AdminView = (props) => {
       // console.log("hi");
       if (restaurantJson.success) {
         let sections = await fetch(
-          "http://localhost:8080/" + restaurantId + "/getSections",
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/` + restaurantId + "/getSections",
           {
             method: "GET",
             headers: {

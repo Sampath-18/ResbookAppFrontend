@@ -34,7 +34,7 @@ const MyProfile = (props) => {
   const onSave = async() => {
     try {
       let restaurantResponse = await fetch(
-        "http://localhost:8080/updateRestaurantDetails/" + props.restaurant._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurantDetails/` + props.restaurant._id,
         {
           method: "POST",
           headers: {

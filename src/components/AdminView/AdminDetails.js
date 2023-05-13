@@ -41,7 +41,7 @@ function AdminDetails(props) {
       // console.log(event.target.checked);
       const status= event.target.checked ? 'Open':'Close'
       let restaurantResponse = await fetch(
-        "http://localhost:8080/updateRestaurantDetails/" + restaurant._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurantDetails/` + restaurant._id,
         {
           method: "POST",
           headers: {
