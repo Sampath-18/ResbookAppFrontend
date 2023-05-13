@@ -141,7 +141,7 @@ const SectionMenu = (props) => {
   const handleRemoveMenuCategoryClick = async (menuCategoryId) => {
     try {
       let deleteResponse = await fetch(
-        "http://localhost:8080/deleteMenuCategory/" + menuCategoryId,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/deleteMenuCategory/` + menuCategoryId,
         {
           method: "GET",
           headers: {
@@ -168,7 +168,7 @@ const SectionMenu = (props) => {
       setEdit(false);
       // console.log(eitem);
       let itemResponse = await fetch(
-        "http://localhost:8080/updateMenuCategory/" + menuCategoryId,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateMenuCategory/` + menuCategoryId,
         {
           method: "POST",
           headers: {

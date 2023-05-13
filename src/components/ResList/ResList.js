@@ -90,7 +90,7 @@ const ResList = (props) => {
           props.restaurantIds
         );
         restaurantsResponse = await fetch(
-          "http://localhost:8080/getRestaurantWithIds",
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getRestaurantWithIds`,
           {
             method: "POST",
             headers: {
@@ -120,7 +120,7 @@ const ResList = (props) => {
         console.log( Object.keys(recommendationResponse.recommended_restaurantIds));//recommendationResponse.recommended_restaurantIds.map((id) => id[0]) );
         if (recommendationResponse.success) {
           restaurantsResponse = await fetch(
-            "http://localhost:8080/getRestaurantWithIds",
+            `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getRestaurantWithIds`,
             {
               method: "POST",
               headers: {
@@ -135,7 +135,7 @@ const ResList = (props) => {
         } else {
           console.log("failed to get recommendations");
           restaurantsResponse = await fetch(
-            "http://localhost:8080/getRestaurants",
+            `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getRestaurants`,
             {
               method: "GET",
               headers: {
@@ -146,7 +146,7 @@ const ResList = (props) => {
         }
       } else
         restaurantsResponse = await fetch(
-          "http://localhost:8080/getRestaurants",
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getRestaurants`,
           {
             method: "GET",
             headers: {
@@ -202,7 +202,7 @@ const ResList = (props) => {
       console.log("fetched likings reslist");
       try {
         let userlikings = await fetch(
-          "http://localhost:8080/getUserLikings/" + user._id,
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getUserLikings/` + user._id,
           {
             method: "GET",
             headers: {

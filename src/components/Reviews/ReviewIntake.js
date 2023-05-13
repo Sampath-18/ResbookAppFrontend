@@ -15,7 +15,7 @@ const ReviewIntake = (props) => {
       const sectionId = props.sectionId 
       const restaurantId = props.restaurantId
       console.log(review);
-      let reviewResponse = await fetch("http://localhost:8080/addReview",{
+      let reviewResponse = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/addReview`,{
         method:"POST",
         headers: {
           "Content-Type": "application/json",

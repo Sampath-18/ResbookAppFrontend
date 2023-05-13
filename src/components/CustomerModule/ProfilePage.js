@@ -69,6 +69,7 @@ function ProfilePage(props) {
   //   },
   // ]
   const { user, login, logout } = React.useContext(UserContext);
+  const [heading,setHeading] = useState("My Account");
   // const [user, setUser] = React.useState(null);
   // const [userlikings, setUserLikings] = React.useState(null);
 
@@ -87,7 +88,7 @@ function ProfilePage(props) {
       }
       try {
         let userlikingsResponse = await fetch(
-          "http://localhost:8080/getUserLikings/" + user._id,
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getUserLikings/` + user._id,
           {
             method: "GET",
             headers: {
@@ -126,7 +127,7 @@ function ProfilePage(props) {
           "My favourites":userLikings ? <MyFavourite mt={appBarHeight} userLikings={userLikings} updateProps={(userlikings) => setUserLikings(userlikings)} /> : <div>Fetching User favorites</div>,
           "Logout":<Typography sx={{marginTop:appBarHeight}}>Are you sure, Do you want to logout?<Button sx={{backgroundColor:'green',color:'white',ml:'1em','&:hover':{backgroundColor:'#06ad03',color:'white'}}} onClick={() => {logout();navigate('/')}}>Yes</Button></Typography>
         }).map(([text,component], index) => (
-          <ListItem onClick={() => setSelectedComponent(component)} key={text} disablePadding>
+          <ListItem onClick={() => {setHeading(text);setSelectedComponent(component)}} key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -165,7 +166,7 @@ function ProfilePage(props) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              All Dine-in Reservations
+              {heading}
             </Typography>
           </Toolbar>
         </AppBar>

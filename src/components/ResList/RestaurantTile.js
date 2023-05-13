@@ -34,7 +34,7 @@ export default function RestaurantTile(props) {
     }
     const operation = isRestaurantSaved ? "$pull":"$addToSet"
     try {
-      let response = await fetch("http://localhost:8080/updateUserLikings/"+props.userlikings.userId,{
+      let response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUserLikings/`+props.userlikings.userId,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"
@@ -65,7 +65,7 @@ export default function RestaurantTile(props) {
     }
     const operation = isRestaurantFavorited ? "$pull":"$addToSet"
     try {
-      let response = await fetch("http://localhost:8080/updateUserLikings/"+props.userlikings.userId,{
+      let response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUserLikings/`+props.userlikings.userId,{
         method:"POST",
         headers:{
           "Content-Type":"application/json"

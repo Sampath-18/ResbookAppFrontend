@@ -34,7 +34,7 @@ const Signup = () => {
     if(user.cpassword === user.password)
     {
       // console.log("passwords matched", JSON.stringify(user));
-      const response = await fetch("http://localhost:8080/signup",{
+      const response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/signup`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json'

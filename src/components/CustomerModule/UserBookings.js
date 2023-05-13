@@ -24,7 +24,7 @@ const UserBookings = (props) => {
     if (props.user) {
       for (const bookingId of props.user.bookings) {
         let bookingResponse = await fetch(
-          "http://localhost:8080/getBookingSummary/" + bookingId,
+          `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getBookingSummary/` + bookingId,
           {
             method: "GET",
             headers: {
