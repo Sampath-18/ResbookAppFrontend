@@ -133,7 +133,7 @@ function AdminDetails(props) {
       </Container> */}
 
       <img
-        style={{ width: "90%", height: "400px", marginTop: "1em", }}
+        style={{ width: "80%", height: "400px", marginTop: "1em", }}
         src={restaurant.coverImage.url}
         alt={restaurant.coverImage.public_id}
       ></img>

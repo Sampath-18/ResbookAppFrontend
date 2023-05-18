@@ -24,7 +24,7 @@ export default function MenuItemExpanded(props) {
         >
           <img
             style={{ width: 300, height: 400 }}
-            src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=1024x768"
+            src="https://media.istockphoto.com/id/593297368/photo/barbecue-chicken-wings-close-up-on-wooden-tray.jpg?s=612x612&w=0&k=20&c=tS1MR5cQBn9Uoeu_oR8NL_nxAC2Gf5jWdqHVLuL37xI="
             alt="Restaurant cover pic"
           ></img>
         </Box>
