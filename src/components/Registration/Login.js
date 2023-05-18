@@ -112,6 +112,7 @@ const Login = () => {
       event.preventDefault();
       const response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/login`, {
         method: "POST",
+        mode: "cors",
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": *,
