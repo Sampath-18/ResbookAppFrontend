@@ -46,7 +46,7 @@ const AdminViewBookings = (props) => {
     // console.log(ed);
     try {
       let bookingsResponse = await fetch(
-        "http://localhost:8080/getSectionsBookings/",
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getSectionsBookings/`,
         {
           method: "POST",
           headers: {
@@ -84,7 +84,7 @@ const AdminViewBookings = (props) => {
     try {
       console.log("called update");
       let updateStatusResponse = await fetch(
-        "http://localhost:8080/updateDineinBooking/" + bookingId,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateDineinBooking/` + bookingId,
         {
           method: "POST",
           headers: {

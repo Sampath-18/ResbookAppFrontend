@@ -13,6 +13,8 @@ import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/img/logo.png"
+
 
 const Signup = () => {
   const paperStyle = { padding: "30px 20px", width: 750, margin: "40px auto" };
@@ -34,7 +36,7 @@ const Signup = () => {
     if(user.cpassword === user.password)
     {
       // console.log("passwords matched", JSON.stringify(user));
-      const response = await fetch("http://localhost:8080/signup",{
+      const response = await fetch(`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/signup`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json'
@@ -67,11 +69,11 @@ const Signup = () => {
       <Paper elevation={20} style={paperStyle}>
         <Grid container>
           <Grid item xs={6}>
-            <div>here we will set the logo</div>
+            {/* <div>here we will set the logo</div> */}
             <img
               className="img1"
-              src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
-              alt="error"
+              src={logo}
+              alt="logo"
               height={350}
               width={350}
               style={imgstyle}

@@ -26,7 +26,7 @@ const SectionAdminView = (props) => {
       // console.log(event.target.checked);
       const status= event.target.checked ? 'Open':'Close'
       let sectionResponse = await fetch(
-        "http://localhost:8080/updateSectionDetails/" + props.section._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateSectionDetails/` + props.section._id,
         {
           method: "POST",
           headers: {
@@ -54,7 +54,7 @@ const SectionAdminView = (props) => {
       // setEdit(false);
       // console.log(eitem);
       let deleteSectionResponse = await fetch(
-        "http://localhost:8080/deleteSection/" + sectionId,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/deleteSection/` + sectionId,
         {
           method: "GET",
           headers: {

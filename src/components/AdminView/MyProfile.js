@@ -34,7 +34,7 @@ const MyProfile = (props) => {
   const onSave = async() => {
     try {
       let restaurantResponse = await fetch(
-        "http://localhost:8080/updateRestaurantDetails/" + props.restaurant._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurantDetails/` + props.restaurant._id,
         {
           method: "POST",
           headers: {
@@ -47,6 +47,7 @@ const MyProfile = (props) => {
       if (restaurantResponse.success) {
         console.log("Updated Admin details Successfully");
         setAdminDetails(editItem)
+        props.setAdminDetails({name:adminDetails.Name,email:adminDetails.Email,phone1:adminDetails.Phone1,phone2:adminDetails.Phone2,password:props.restaurant.admin.password})
         setEditItem(null)
       } else {
         console.log(restaurantResponse.message);
@@ -66,9 +67,9 @@ const MyProfile = (props) => {
     setEditItem({...editItem,[event.target.name]:event.target.value})
   }
 
-  useEffect(() => {
-    props.setAdminDetails({name:adminDetails.Name,email:adminDetails.Email,phone1:adminDetails.Phone1,phone2:adminDetails.Phone2,password:props.restaurant.admin.password})
-  }, [adminDetails])
+  // useEffect(() => {
+  //   props.setAdminDetails({name:adminDetails.Name,email:adminDetails.Email,phone1:adminDetails.Phone1,phone2:adminDetails.Phone2,password:props.restaurant.admin.password})
+  // }, [adminDetails])
 
   return (
     <Container sx={{ display: "flex", gap: "3em" }}>
@@ -106,7 +107,8 @@ const MyProfile = (props) => {
             flexGrow: 1,
           }}
         >
-          <Container sx={{ dispaly: "flex", flexDirection:'row', justifyContent: "flex-end", marginTop:'8em' }}>
+          <Container sx={{ dispaly: "flex", flexDirection:'row', justifyContent: "space-between", marginTop:'8em' }}>
+            <Typography variant="h5" fontWeight='bold' sx={{color:'black'}}>My Profile</Typography>
             {editItem ? (
               <Container>
                 <Button

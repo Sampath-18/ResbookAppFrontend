@@ -81,7 +81,7 @@ const UserDetails = (props) => {
       userObj["maritalStatus"] = editUserDetailsItem["Marital Status"];
       // console.log(userObj);
       let userResponse = await fetch(
-        "http://localhost:8080/updateUser/" + props.user._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUser/` + props.user._id,
         {
           method: "POST",
           headers: {
@@ -101,7 +101,7 @@ const UserDetails = (props) => {
       }
 
       let userLikingsResponse = await fetch(
-        "http://localhost:8080/addUserFavorites/" + props.user._id,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/addUserFavorites/` + props.user._id,
         {
           method: "POST",
           headers: {
@@ -148,11 +148,11 @@ const UserDetails = (props) => {
   }, [props]);
 
   return user ? (
-    <Container>
+    <Container sx={{marginTop:props.mt ? props.mt : 0}}>
       <Paper
         elavation={4}
         sx={{
-          marginTop: "3em",
+          // marginTop: "3em",
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "space-between",
@@ -167,7 +167,7 @@ const UserDetails = (props) => {
       >
         <ImageBoxWrapper>
           <RoundedAvatar
-            src="https://www.licious.in/blog/wp-content/uploads/2022/06/mutton-hyderabadi-biryani-01-750x750.jpg"
+            src="https://unsplash.com/s/photos/profile"
             alt="Your Image"
           />
           <Typography variant="h4" fontWeight="800" sx={{ marginLeft: "1em" }}>

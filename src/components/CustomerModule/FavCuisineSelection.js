@@ -31,7 +31,7 @@ const FavCuisineSelection = () => {
     let justCuisines = cuisines.filter((cuisine) => cuisine[1]);
     justCuisines = { cuisines: justCuisines.map((cuisine) => cuisine[0]) };
     let response = await fetch(
-      "http://localhost:8080/addUserFavorites/" + id,
+      `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/addUserFavorites/` + id,
       {
         method: "POST",
         headers: {

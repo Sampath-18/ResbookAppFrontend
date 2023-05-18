@@ -31,7 +31,7 @@ const MyFavourite = (props) => {
       try {
         for (let i = 0; i < itemIds.length; i++) {
           let itemResponse = await fetch(
-            "http://localhost:8080/getMenuItem/" + itemIds[i],
+            `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/getMenuItem/` + itemIds[i],
             {
               method: "GET",
               headers: {
@@ -58,7 +58,7 @@ const MyFavourite = (props) => {
     let justCuisines = editCuisines.filter((cuisine) => cuisine[1]);
     justCuisines = { justCuisines: justCuisines.map((cuisine) => cuisine[0]) };
     let response = await fetch(
-      "http://localhost:8080/addUserFavorites/" + props.userLikings.userId,
+      `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/addUserFavorites/` + props.userLikings.userId,
       {
         method: "POST",
         headers: {
@@ -81,7 +81,7 @@ const MyFavourite = (props) => {
     try {
       // const operation = isFavoriteSection ? "$pull" : "$addToSet";
       let response = await fetch(
-        "http://localhost:8080/updateUserLikings/" + props.userLikings.userId,
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateUserLikings/` + props.userLikings.userId,
         {
           method: "POST",
           headers: { "Content-type": "application/json" },
@@ -139,13 +139,13 @@ const MyFavourite = (props) => {
   };
 
   return (
-    <Container>
+    <Container sx={{marginTop:props.mt ? props.mt :0}}>
       <Box
         sx={{
           width: "100%",
           height: 80,
           backgroundColor: "primary.dark",
-          marginTop: "1.1em",
+          // marginTop: "1.1em",
           borderRadius: "1em",
           display: "flex",
           justifyContent: "space-between",

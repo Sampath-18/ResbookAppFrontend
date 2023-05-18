@@ -95,7 +95,7 @@ const ReviewAddRestaurant = () => {
     event.preventDefault();
     try {
       const AddRestaurantResponse = await fetch(
-        "http://localhost:8080/addRestaurant",
+        `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/addRestaurant`,
         {
           method: "POST",
           headers: {
@@ -119,7 +119,7 @@ const ReviewAddRestaurant = () => {
           formData1.append("coverImage", restaurant.coverImage);
           const boundary1 = Math.random().toString().substr(2);
           let imgResponse1 = await axios.post(
-            "http://localhost:8080/updateRestaurant/updateImage/" + resId,
+            `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/updateImage/` + resId,
             formData1,
             {
               "Content-Type": "multipart/form-data; boundary=" + boundary1,
@@ -132,7 +132,7 @@ const ReviewAddRestaurant = () => {
           for (let section of sections) {
             const menu = section.menu;
             const sectionResponse = await fetch(
-              "http://localhost:8080/updateRestaurant/addSection/" + resId,
+              `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/addSection/` + resId,
               {
                 method: "POST",
                 headers: {
@@ -162,7 +162,7 @@ const ReviewAddRestaurant = () => {
 
                 const boundary = Math.random().toString().substr(2);
                 // let imgResponse = await fetch(
-                //   "http://localhost:8080/updateSectionImages/" + secId,
+                //   `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateSectionImages/` + secId,
                 //   {
                 //     method: "POST",
                 //     headers: {
@@ -172,7 +172,7 @@ const ReviewAddRestaurant = () => {
                 //   }
                 // );
                 let imgResponse = await axios.post(
-                  "http://localhost:8080/updateSectionImages/" + secId,
+                  `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateSectionImages/` + secId,
                   formData,
                   {
                     "Content-Type": "multipart/form-data; boundary=" + boundary,
@@ -195,7 +195,7 @@ const ReviewAddRestaurant = () => {
                       })
                     );
                     const menucategoryResponse = await fetch(
-                      "http://localhost:8080/updateRestaurant/updateSection/addMenuCategory/" +
+                      `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/updateSection/addMenuCategory/` +
                         secId,
                       {
                         method: "POST",
@@ -226,9 +226,9 @@ const ReviewAddRestaurant = () => {
                               "item adding:",
                               JSON.stringify(menuItem)
                             );
-                            // console.log("End point called:","http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/"+categoryId)
+                            // console.log("End point called:",`${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/`+categoryId)
                             const menuItemResponse = await fetch(
-                              "http://localhost:8080/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/" +
+                              `${process.env.REACT_APP_NODEJS_BACKEND_API_ENDPOINT}/updateRestaurant/updateSection/updateMenuCategory/addMenuItem/` +
                                 categoryId,
                               {
                                 method: "POST",
