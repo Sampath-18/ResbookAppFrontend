@@ -167,7 +167,7 @@ const UserDetails = (props) => {
       >
         <ImageBoxWrapper>
           <RoundedAvatar
-            src="https://www.licious.in/blog/wp-content/uploads/2022/06/mutton-hyderabadi-biryani-01-750x750.jpg"
+            src="https://unsplash.com/s/photos/profile"
             alt="Your Image"
           />
           <Typography variant="h4" fontWeight="800" sx={{ marginLeft: "1em" }}>

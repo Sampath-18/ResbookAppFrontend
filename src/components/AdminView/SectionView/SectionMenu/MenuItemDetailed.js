@@ -140,7 +140,7 @@ const MenuItemDetailed = (props) => {
         >
           <img
             style={{ width: 300, height: 400 }}
-            src="https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=1024x768"
+            src="https://www.licious.in/blog/wp-content/uploads/2022/06/mutton-hyderabadi-biryani-01-750x750.jpg"
             alt="Restaurant cover pic"
           ></img>
         </Box>
