@@ -115,8 +115,8 @@ const Login = () => {
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": *,
-"Access-Control-Allow-Credentials": true
+          "Access-Control-Allow-Origin":"*",
+"Access-Control-Allow-Credentials":"true"
         },
         body: JSON.stringify(loginDetails),
       });
